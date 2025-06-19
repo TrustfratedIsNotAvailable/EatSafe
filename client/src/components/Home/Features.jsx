@@ -1,5 +1,26 @@
 import { motion } from "framer-motion";
 
+// const features = [
+//   {
+//     title: "Smart Expiry Management",
+//     description:
+//       "Track expiry dates, get visual alerts for nearly expired items, and stay ahead with timely notifications — reduce waste effortlessly.",
+//     emoji: "⏳",
+//   },
+//   {
+//     title: "Fridge Organization & Notes",
+//     description:
+//       "Easily categorize food, search and filter your inventory, and attach helpful notes or meal plans for smarter usage.",
+//     emoji: "🗂️",
+//   },
+//   {
+//     title: "Visualize Your Inventory",
+//     description:
+//       "View your items in a visual card layout and monitor by category to keep your kitchen organized.",
+//     emoji: "📦",
+//   },
+// ];
+
 const features = [
   {
     title: "Track Expiry Dates",
@@ -60,17 +81,19 @@ const Features = () => {
           {features.map((feature, idx) => (
             <motion.div
               key={idx}
-              className="bg-[#F4FDF5] rounded-2xl p-6 text-left transition transform hover:-translate-y-1 hover:shadow-md hover:shadow-[#435A30]"
+              // className="p-6 text-left transition transform hover:-translate-y-1 hover:shadow-md bg-white border-b-2 border-yellow-200 text-[#43AF50]"
+              className={`p-6 text-left transition transform hover:-translate-y-1 ${
+                idx === features.length - 1
+                  ? "bg-white shadow-sm shadow-[#43AF50] text-[#43AF50]"
+                  : "bg-[#43AF50] text-white"
+              }`}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: idx * 0.1 }}
               viewport={{ once: true }}
             >
-              <div className="text-3xl mb-2">{feature.emoji}</div>
-              <h3 className="text-xl font-semibold mb-2 text-[#388E3C]">
-                {feature.title}
-              </h3>
-              <p className="text-gray-600 text-sm">{feature.description}</p>
+              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+              <p className="text-sm">{feature.description}</p>
             </motion.div>
           ))}
         </div>

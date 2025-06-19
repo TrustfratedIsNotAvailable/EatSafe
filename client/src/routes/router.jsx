@@ -3,6 +3,8 @@ import MainLayout from "../layouts/MainLayout";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Home from "../pages/Home";
+import AddItem from "../pages/AddItem";
+import PrivateRoute from "./PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -12,6 +14,14 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "add-item",
+        element: (
+          <PrivateRoute>
+            <AddItem />
+          </PrivateRoute>
+        ),
       },
     ],
   },

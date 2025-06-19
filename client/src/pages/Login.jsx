@@ -2,8 +2,73 @@ import { Link } from "react-router";
 import Lottie from "lottie-react";
 import { FcGoogle } from "react-icons/fc";
 import loginAnimation from "../assets/login-animation.json";
+import { useLocation, useNavigate } from "react-router";
+import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 const Login = () => {
+  const { login, googleSignIn } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    login(email, password)
+      .then((res) => {
+        toast.success("Login success");
+        navigate(from, { replace: true });
+        form.reset();
+      })
+      .catch((err) => toast.error("Login Failed"));
+  };
+
+  const handleGoogleLogin = () => {
+    googleSignIn()
+      .then((result) => {
+        const user = result.user;
+        const savedUser = {
+          name: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          uid: user.uid,
+        };
+
+        // Try to get the user by UID
+        axios
+          .get(`http://localhost:3000/users/${user.uid}`)
+          .then((res) => {
+            // If user exists, proceed
+            toast.success("Logged in successfully!");
+            navigate("/");
+          })
+          .catch((err) => {
+            if (err.response && err.response.status === 404) {
+              // User not found, add them
+              axios
+                .post("http://localhost:3000/users", savedUser)
+                .then(() => {
+                  toast.success("User created & logged in!");
+                  navigate("/");
+                })
+                .catch((error) => toast.error("Failed to save user"));
+            } else {
+              toast.error("Something went wrong");
+            }
+          });
+      })
+      .catch((error) => {
+        toast.error("Google login failed");
+      });
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="max-w-6xl w-full bg-white shadow-[#43AF50] shadow-lg p-6 rounded-lg flex flex-col md:flex-row items-center justify-between gap-8">
@@ -31,6 +96,7 @@ const Login = () => {
             {/* Google Login */}
             <div className="mb-4">
               <button
+                onClick={handleGoogleLogin}
                 type="button"
                 className="flex items-center justify-center gap-3 w-full border border-gray-300 py-2 rounded-md hover:bg-gray-100 transition"
               >
@@ -49,26 +115,26 @@ const Login = () => {
             </div>
 
             {/* Email/Password Login */}
-            <form className="flex flex-col gap-4">
+            <form onSubmit={handleLogin} className="flex flex-col gap-4">
               <input
                 type="email"
+                name="email"
                 placeholder="Email"
                 className="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B5E20]"
                 required
               />
               <input
                 type="password"
+                name="password"
                 placeholder="Password"
                 className="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B5E20]"
                 required
               />
-
-              <button
+              <input
                 type="submit"
+                value="Login"
                 className="bg-[#1B5E20] text-white py-2 rounded-full hover:bg-[#388E3C] transition w-full"
-              >
-                Login
-              </button>
+              />
             </form>
 
             {/* Footer Links */}
@@ -86,7 +152,6 @@ const Login = () => {
                 </Link>
               </span>
             </div>
-          
           </div>
         </div>
       </div>

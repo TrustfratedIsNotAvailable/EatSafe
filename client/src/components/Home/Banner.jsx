@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router";
 import bgImage from "../../assets/library-bg.avif";
-import TrueFocus from "./TrueFocus";
+import TrueFocus from "../animation/TrueFocus";
 
 const Banner = () => {
   return (

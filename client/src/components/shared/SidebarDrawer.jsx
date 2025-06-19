@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { X } from "lucide-react"; // Ensure lucide-react is installed
+import { Link } from "react-router";
 
 const SidebarDrawer = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,30 +65,30 @@ const SidebarDrawer = () => {
 
         {/* Navigation Menu */}
         <nav className="flex flex-col gap-4 p-4">
-          <a
-            href="#dashboard"
+          <Link
+            to={"/"}
             className="hover:text-[#1B5E20] transition-colors"
           >
             Home
-          </a>
-          <a
-            href="#dashboard"
+          </Link>
+          <Link
+            href="/"
             className="hover:text-[#1B5E20] transition-colors"
           >
             Fridge
-          </a>
+          </Link>
           <a
             href="#dashboard"
             className="hover:text-[#1B5E20] transition-colors"
           >
             Dashboard
           </a>
-          <a
-            href="#add-item"
+          <Link
+            to="/add-item"
             className="hover:text-[#1B5E20] transition-colors"
           >
             Add Food Item
-          </a>
+          </Link>
           <a
             href="#inventory"
             className="hover:text-[#1B5E20] transition-colors"
