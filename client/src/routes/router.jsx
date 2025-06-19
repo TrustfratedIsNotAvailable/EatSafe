@@ -5,6 +5,8 @@ import Register from "../pages/Register";
 import Home from "../pages/Home";
 import AddItem from "../pages/AddItem";
 import PrivateRoute from "./PrivateRoute";
+import Fridge from "../pages/Fridge";
+import { foodLoader } from "../loaders/foodLoader";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +16,11 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "fridge",
+        element: <Fridge />,
+        loader: foodLoader,
       },
       {
         path: "add-item",
