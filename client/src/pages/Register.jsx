@@ -13,7 +13,7 @@ const Register = () => {
   const navigate = useNavigate();
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const validateURL = (url) => /^(ftp|http|https):\/\/[^ "]+$/.test(url);
+  const validateURL = (url) => /^(http|https):\/\/[^ "]+$/.test(url);
   const validatePassword = (password) =>
     /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/.test(password);
   const validateName = (name) => name.length >= 5 && name.length <= 20;

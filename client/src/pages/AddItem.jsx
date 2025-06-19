@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import { useAuth } from "../context/AuthContext";
+import axios from "axios";
 
 const AddItem = () => {
+  const { user } = useAuth();
+
   const [errors, setErrors] = useState({});
 
   const [formData, setFormData] = useState({
@@ -12,7 +16,7 @@ const AddItem = () => {
     expiryDate: "",
     description: "",
     addedDate: new Date().toISOString().split("T")[0],
-    userEmail: "", 
+    userEmail: "",
     uid: "",
   });
 
@@ -24,14 +28,19 @@ const AddItem = () => {
     }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
-  
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
 
-    if (!formData.foodImage.trim())
+    const validateImageURL = (url) => /^(http|https):\/\/[^ "]+$/.test(url);
+
+    if (!formData.foodImage.trim()) {
       newErrors.foodImage = "Image URL is required.";
+    } else if (!validateImageURL(formData.foodImage.trim())) {
+      newErrors.foodImage =
+        "Please enter a valid image URL (ending in .jpg, .png, etc).";
+    }
     if (!formData.title.trim()) newErrors.title = "Title is required.";
     if (!formData.category.trim()) newErrors.category = "Category is required.";
     if (!formData.quantity || formData.quantity <= 0)
@@ -44,8 +53,33 @@ const AddItem = () => {
       return;
     }
 
-    console.log(formData);
-    toast.success("Item added successfully!");
+    // Add user info to form data
+    const payload = {
+      ...formData,
+      userEmail: user?.email,
+      uid: user?.uid,
+    };
+
+    try {
+      const response = await axios.post("http://localhost:3000/food", payload);
+      toast.success("Item added successfully!");
+      setFormData({
+        foodImage: "",
+        title: "",
+        category: "",
+        quantity: "",
+        expiryDate: "",
+        description: "",
+        addedDate: new Date().toISOString().split("T")[0],
+        userEmail: "",
+        uid: "",
+      });
+
+      setErrors({});
+    } catch (error) {
+      console.error("Error adding item:", error);
+      toast.error("Failed to add item. Please try again.");
+    }
   };
 
   const categories = [
