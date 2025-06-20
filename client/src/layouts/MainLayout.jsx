@@ -7,7 +7,7 @@ const MainLayout = () => {
   return (
     <div>
       <Navbar />
-      <div className="pt-16 p-4 flex flex-col items-center">
+      <div className="pt-16">
         <Outlet />
       </div>
       <Footer />

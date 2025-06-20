@@ -1,8 +1,8 @@
-import { Link } from "react-router";
 import Banner from "../components/Home/Banner";
 import Features from "../components/Home/Features";
 import NearlyExpiredSection from "../components/Home/NearlyExpiredSection";
 import ExpiredItemsSection from "../components/Home/ExpiredItemsSection";
+import CallToAction from "../components/Home/CallToAction";
 
 const Home = () => {
   return (
@@ -11,6 +11,7 @@ const Home = () => {
       <Features />
       <NearlyExpiredSection />
       <ExpiredItemsSection />
+      <CallToAction />
     </>
   );
 };
