@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { X } from "lucide-react"; // Ensure lucide-react is installed
 import { Link } from "react-router";
+import NavLinks from "./NavLinks";
 
 const SidebarDrawer = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -62,57 +63,9 @@ const SidebarDrawer = () => {
             <X className="text-black" />
           </button>
         </div>
-
-        {/* Navigation Menu */}
+        {/* Navigation menu  */}
         <nav className="flex flex-col gap-4 p-4">
-          <Link to={"/"} className="hover:text-[#1B5E20] transition-colors">
-            Home
-          </Link>
-          <Link
-            to={"/fridge"}
-            className="hover:text-[#1B5E20] transition-colors"
-          >
-            Fridge
-          </Link>
-          <a
-            href="#dashboard"
-            className="hover:text-[#1B5E20] transition-colors"
-          >
-            Dashboard
-          </a>
-          <Link
-            to="/add-item"
-            className="hover:text-[#1B5E20] transition-colors"
-          >
-            Add Food Item
-          </Link>
-          <Link
-            to={"/my-item"}
-            className="hover:text-[#1B5E20] transition-colors"
-          >
-            My Inventory
-          </Link>
-          <a
-            href="#expiringSoon"
-            className="hover:text-[#1B5E20] transition-colors"
-          >
-            Expiring Soon
-          </a>
-          <a
-            href="#notifications"
-            className="hover:text-[#1B5E20] transition-colors"
-          >
-            Notifications
-          </a>
-          <a
-            href="#settings"
-            className="hover:text-[#1B5E20] transition-colors"
-          >
-            Settings
-          </a>
-          <a href="#help" className="hover:text-[#1B5E20] transition-colors">
-            Help & Support
-          </a>
+          <NavLinks />
         </nav>
       </aside>
     </>
