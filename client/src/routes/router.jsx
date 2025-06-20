@@ -12,6 +12,7 @@ import MyProfile from "../pages/MyProfile";
 import MyItem from "../pages/MyItem";
 import Details from "../pages/Details";
 import UpdateItem from "../pages/UpdateItem";
+import Dashboard from "../pages/DashBoard";
 
 const router = createBrowserRouter([
   {
@@ -68,6 +69,15 @@ const router = createBrowserRouter([
             <MyProfile />
           </PrivateRoute>
         ),
+      },
+      {
+        path: "dashboard",
+        element: (
+          <PrivateRoute>
+            <Dashboard />
+          </PrivateRoute>
+        ),
+        loader: foodLoader,
       },
     ],
   },

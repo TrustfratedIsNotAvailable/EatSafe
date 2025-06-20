@@ -10,9 +10,9 @@ const NavLinks = ({ className = "" }) => {
       <Link to="/fridge" className="hover:text-[#1B5E20] transition-colors">
         Fridge
       </Link>
-      <a href="#dashboard" className="hover:text-[#1B5E20] transition-colors">
+      <Link to={"/dashboard"} className="hover:text-[#1B5E20] transition-colors">
         Dashboard
-      </a>
+      </Link>
       <Link to="/add-item" className="hover:text-[#1B5E20] transition-colors">
         Add Food Item
       </Link>

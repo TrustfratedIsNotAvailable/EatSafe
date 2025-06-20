@@ -98,7 +98,7 @@ const AddItem = () => {
   return (
     <div className="w-full px-4 md:px-8 max-w-3xl mx-auto mt-10 bg-gray-100 p-6 rounded-xl shadow-md">
       <h2 className="text-3xl font-bold text-green-500 text-center mb-4">
-        🍽 Add New Food Item 🍽
+        Add New Food Item
       </h2>
       <p className="text-center font-semibold text-xl mb-6">
         Fill up the Details page to add Foods!
