@@ -7,6 +7,7 @@ import AddItem from "../pages/AddItem";
 import PrivateRoute from "./PrivateRoute";
 import Fridge from "../pages/Fridge";
 import { foodLoader } from "../loaders/foodLoader";
+import MyProfile from "../pages/MyProfile";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <AddItem />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "my-profile",
+        element: (
+          <PrivateRoute>
+            <MyProfile />
           </PrivateRoute>
         ),
       },

@@ -101,11 +101,13 @@ const Fridge = () => {
         <FridgeCards currentItems={currentItems} />
 
         {/* Pagination */}
-        <FridgePagination
-          totalPages={totalPages}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-        />
+        {currentItems.length !== 0 && (
+          <FridgePagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        )}
       </div>
     </>
   );

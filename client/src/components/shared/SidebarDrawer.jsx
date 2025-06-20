@@ -72,7 +72,7 @@ const SidebarDrawer = () => {
             Home
           </Link>
           <Link
-            href="/fridge"
+            to={"/fridge"}
             className="hover:text-[#1B5E20] transition-colors"
           >
             Fridge

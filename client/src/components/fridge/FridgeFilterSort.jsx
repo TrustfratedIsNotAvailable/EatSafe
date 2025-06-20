@@ -11,7 +11,7 @@ const FridgeFilterSort = ({
   endIndex,
 }) => {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+    <div className="flex flex-col items-center justify-between md:flex-row gap-4 mb-6">
       <p className="text-gray-700 font-medium">
         Showing {startIndex + 1}-{endIndex} of {totalItems} results
       </p>

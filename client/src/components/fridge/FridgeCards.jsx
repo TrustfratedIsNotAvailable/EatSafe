@@ -1,8 +1,15 @@
 import React from "react";
 import { Link } from "react-router";
 
-const FridgeCards = ({currentItems}) => {
-  
+const FridgeCards = ({ currentItems }) => {
+  if (currentItems.length === 0) {
+    return (
+      <div className="text-center text-gray-500 py-20">
+        <p className="text-lg font-medium">No food items found</p>
+        <p className="text-sm">Try changing your filters or search query.</p>
+      </div>
+    );
+  }
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {currentItems.map((item) => {
@@ -29,7 +36,10 @@ const FridgeCards = ({currentItems}) => {
                 <p className="text-sm text-gray-600">
                   Quantity: {item.quantity}
                 </p>
-                <Link to={`/details/${item._id}`} className="btn btn-outline btn-sm w-full mt-2">
+                <Link
+                  to={`/details/${item._id}`}
+                  className="btn btn-outline btn-sm w-full mt-2"
+                >
                   See Details
                 </Link>
               </div>
