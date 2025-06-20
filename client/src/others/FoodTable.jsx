@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -12,6 +12,9 @@ import toast from "react-hot-toast";
 
 const FoodTable = ({ myItems, setMyItems }) => {
   const columnHelper = createColumnHelper();
+
+  const [pageIndex, setPageIndex] = useState(0);
+  const pageSize = 6;
 
   const handleDelete = async (id) => {
     const result = await Swal.fire({
@@ -90,10 +93,23 @@ const FoodTable = ({ myItems, setMyItems }) => {
     [setMyItems]
   );
 
+  const paginatedItems = useMemo(() => {
+    const start = pageIndex * pageSize;
+    return myItems.slice(start, start + pageSize);
+  }, [myItems, pageIndex]);
+
   const table = useReactTable({
-    data: myItems,
+    data: paginatedItems,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    state: {
+      pagination: {
+        pageIndex,
+        pageSize,
+      },
+    },
+    pageCount: Math.ceil(myItems.length / pageSize),
+    manualPagination: false,
   });
 
   return (
@@ -137,6 +153,30 @@ const FoodTable = ({ myItems, setMyItems }) => {
           ))}
         </tbody>
       </table>
+
+      <div className="flex justify-end gap-4 p-4">
+        <button
+          onClick={() => setPageIndex((old) => Math.max(old - 1, 0))}
+          disabled={pageIndex === 0}
+          className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <span className="text-sm text-gray-600">
+          Page {pageIndex + 1} of {Math.ceil(myItems.length / pageSize)}
+        </span>
+        <button
+          onClick={() =>
+            setPageIndex((old) =>
+              old + 1 < Math.ceil(myItems.length / pageSize) ? old + 1 : old
+            )
+          }
+          disabled={pageIndex + 1 >= Math.ceil(myItems.length / pageSize)}
+          className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };

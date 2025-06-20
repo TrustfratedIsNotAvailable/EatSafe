@@ -65,10 +65,7 @@ const SidebarDrawer = () => {
 
         {/* Navigation Menu */}
         <nav className="flex flex-col gap-4 p-4">
-          <Link
-            to={"/"}
-            className="hover:text-[#1B5E20] transition-colors"
-          >
+          <Link to={"/"} className="hover:text-[#1B5E20] transition-colors">
             Home
           </Link>
           <Link
@@ -89,14 +86,14 @@ const SidebarDrawer = () => {
           >
             Add Food Item
           </Link>
-          <a
-            href="#inventory"
+          <Link
+            to={"/my-item"}
             className="hover:text-[#1B5E20] transition-colors"
           >
             My Inventory
-          </a>
+          </Link>
           <a
-            href="#expiring-soon"
+            href="#expiringSoon"
             className="hover:text-[#1B5E20] transition-colors"
           >
             Expiring Soon
