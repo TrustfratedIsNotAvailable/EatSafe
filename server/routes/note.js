@@ -30,6 +30,28 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Update
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const updatedNote = req.body;
+
+  try {
+    const result = await req.notesCollection.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: updatedNote }
+    );
+
+    if (result.modifiedCount > 0) {
+      res.send({ success: true, message: "Note updated successfully" });
+    } else {
+      res.status(404).json({ message: "Note not found or unchanged" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update note", error });
+  }
+});
+
+
 // Delete
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
@@ -48,5 +70,44 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ message: "Failed to delete note", error });
   }
 });
+
+// Like/unlike toggle
+router.put("/like/:id", async (req, res) => {
+  const { id } = req.params;
+  const { userEmail } = req.body;
+
+  try {
+    const note = await req.notesCollection.findOne({ _id: new ObjectId(id) });
+
+    if (!note) return res.status(404).send({ message: "Note not found" });
+
+    // Initialize likes if not present
+    if (!note.likes) {
+      note.likes = [];
+      await req.notesCollection.updateOne(
+        { _id: new ObjectId(id) },
+        { $set: { likes: [] } }
+      );
+    }
+
+    const alreadyLiked = note.likes.includes(userEmail);
+
+    const update = alreadyLiked
+      ? { $pull: { likes: userEmail } }
+      : { $addToSet: { likes: userEmail } };
+
+    await req.notesCollection.updateOne(
+      { _id: new ObjectId(id) },
+      update
+    );
+
+    res.send({ success: true, liked: !alreadyLiked });
+  } catch (err) {
+    console.error("Error toggling like:", err);
+    res.status(500).send({ message: "Failed to toggle like", error: err });
+  }
+});
+
+
 
 module.exports = router;
