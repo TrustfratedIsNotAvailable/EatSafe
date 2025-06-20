@@ -3,6 +3,7 @@ import Swal from "sweetalert2";
 import { toast } from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
+import MyFoodSummary from "../others/MyFoodSummary";
 
 const MyProfile = () => {
   const { user, updateUserProfile, setUser } = useAuth();
@@ -70,7 +71,7 @@ const MyProfile = () => {
 
   return (
     <div>
-      <div className="w-full mx-auto max-w-3xl bg-white shadow-md rounded-2xl p-6 mt-10 text-center">
+      <div className="mx-auto max-w-3xl bg-white shadow-md rounded-2xl p-6 mt-10 text-center">
         <h2 className="text-2xl font-semibold text-green-600 mb-4">
           My Profile
         </h2>
@@ -111,6 +112,7 @@ const MyProfile = () => {
           {loading ? "Updating..." : "Update Profile"}
         </button>
       </div>
+      <MyFoodSummary />
     </div>
   );
 };
