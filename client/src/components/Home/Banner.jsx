@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router";
-import bgImage from "../../assets/library-bg.avif";
+import bgImage from "../../assets/bg-banner-2.jpg";
 import TrueFocus from "../animation/TrueFocus";
 
 const Banner = () => {
@@ -35,7 +35,7 @@ const Banner = () => {
         </motion.h1>
 
         <motion.p
-          className="text-lg sm:text-xl text-gray-200 mb-8"
+          className="text-lg sm:text-xl mb-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.6 }}

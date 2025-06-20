@@ -1,9 +1,12 @@
 import React from "react";
-import { Link } from "react-router";
 import SidebarDrawer from "../navbar/SidebarDrawer";
 import HorizontalNav from "../navbar/HorizontalNav";
+import { useAuth } from "../../context/AuthContext";
+import UserMenu from "../navbar/UserMenu";
 
 const Navbar = () => {
+  const { user, logout } = useAuth();
+
   return (
     <header className="w-full flex justify-between items-center p-4 fixed top-0 left-0 bg-white z-50 h-16 shadow">
       {/* Mobile Menu */}
@@ -20,15 +23,7 @@ const Navbar = () => {
         <HorizontalNav />
       </div>
 
-      {/* Login Button */}
-      <div className="ml-auto">
-        <Link
-          to="/login"
-          className="bg-[#1B5E20] text-white px-4 py-2 rounded-xl hover:bg-[#388E3C] transition"
-        >
-          Login
-        </Link>
-      </div>
+      <UserMenu user={user} logout={logout} />
     </header>
   );
 };
