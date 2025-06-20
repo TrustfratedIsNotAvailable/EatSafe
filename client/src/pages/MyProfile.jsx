@@ -71,7 +71,7 @@ const MyProfile = () => {
 
   return (
     <div>
-      <div className="mx-auto max-w-3xl bg-white shadow-md rounded-2xl p-6 mt-10 text-center">
+      <div className="w-full max-w-3xl mx-auto bg-white shadow-md rounded-2xl p-6 mt-10 text-center">
         <h2 className="text-2xl font-semibold text-green-600 mb-4">
           My Profile
         </h2>

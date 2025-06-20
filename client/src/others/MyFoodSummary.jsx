@@ -60,34 +60,11 @@ const MyFoodSummary = () => {
 
   return (
     <div className="w-full text-center p-6 max-w-3xl mx-auto bg-white shadow rounded-2xl mt-10">
-      <h2 className="text-2xl font-bold text-blue-600 mb-2">
-        🍱 My Food Summary
-      </h2>
+      <h2 className="text-2xl font-bold text-blue-600 mb-2">My Food Summary</h2>
       <p className="text-lg font-semibold mb-6">
         Total Foods: <span className="text-black">{total}</span>
       </p>
 
-      {/* <div className="flex justify-center">
-        <ResponsiveContainer width={400} height={400}>
-          <PieChart>
-            <Pie
-              data={chartData}
-              dataKey="value"
-              nameKey="name"
-              cx="50%"
-              cy="50%"
-              outerRadius={120}
-              label
-            >
-              {chartData.map((_, index) => (
-                <Cell key={index} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip />
-            <Legend layout="horizontal" verticalAlign="bottom" align="center" />
-          </PieChart>
-        </ResponsiveContainer>
-      </div> */}
       {total > 0 ? (
         <div className="flex justify-center">
           <ResponsiveContainer width={400} height={400}>
@@ -117,7 +94,6 @@ const MyFoodSummary = () => {
       ) : (
         <p className="text-gray-500 mt-6">No food data available to display.</p>
       )}
-      
     </div>
   );
 };
