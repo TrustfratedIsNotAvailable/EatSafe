@@ -3,6 +3,7 @@ import SidebarDrawer from "../navbar/SidebarDrawer";
 import HorizontalNav from "../navbar/HorizontalNav";
 import { useAuth } from "../../context/AuthContext";
 import UserMenu from "../navbar/UserMenu";
+import ThemeToggleButton from "../others/ThemeToggleButton";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -23,7 +24,11 @@ const Navbar = () => {
         <HorizontalNav />
       </div>
 
-      <UserMenu user={user} logout={logout} />
+
+      <div className="flex items-center gap-4">
+        <ThemeToggleButton />
+        <UserMenu user={user} logout={logout} />
+      </div>
     </header>
   );
 };

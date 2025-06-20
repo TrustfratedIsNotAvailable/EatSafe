@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import { toast } from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
-import MyFoodSummary from "../others/MyFoodSummary";
+import MyFoodSummary from "../components/others/MyFoodSummary";
 
 const MyProfile = () => {
   const { user, updateUserProfile, setUser } = useAuth();

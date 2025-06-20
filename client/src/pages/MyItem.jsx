@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import Spinner from "../components/shared/Spinner";
-import FoodTable from "../others/FoodTable";
+import FoodTable from "../components/others/FoodTable";
 
 const MyItem = () => {
   const { user } = useAuth();
