@@ -9,6 +9,8 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import axios from "axios";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import UpdateItem from "../../pages/UpdateItem";
+import { Link } from "react-router";
 
 const FoodTable = ({ myItems, setMyItems }) => {
   const columnHelper = createColumnHelper();
@@ -77,9 +79,12 @@ const FoodTable = ({ myItems, setMyItems }) => {
         header: "Actions",
         cell: ({ row }) => (
           <div className="flex gap-2">
-            <button className="cursor-pointer text-blue-500 hover:text-blue-700">
+            <Link
+              to={`/update-item/${row.original._id}`}
+              className="cursor-pointer text-blue-500 hover:text-blue-700"
+            >
               <FaEdit />
-            </button>
+            </Link>
             <button
               className="cursor-pointer text-red-500 hover:text-red-700"
               onClick={() => handleDelete(row.original._id)}
@@ -138,11 +143,11 @@ const FoodTable = ({ myItems, setMyItems }) => {
               key={row.id}
               className={`border-l-4 ${
                 row.original.status === "expired"
-                  ? "border-red-500 bg-red-100 hover:bg-red-300"
+                  ? "border-red-500 bg-red-100 hover:bg-red-200"
                   : row.original.status === "nearly expired"
-                  ? "border-yellow-500 bg-yellow-100 hover:bg-yellow-300"
+                  ? "border-yellow-500 bg-yellow-100 hover:bg-yellow-200"
                   : "border-green-500 hover:bg-green-200"
-              } hover:bg-opacity-90`}
+              } hover:bg-opacity-90 border-b border-b-gray-200`}
             >
               {row.getVisibleCells().map((cell) => (
                 <td key={cell.id} className="py-2 px-4">

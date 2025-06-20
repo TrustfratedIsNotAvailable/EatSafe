@@ -18,7 +18,7 @@ const FridgeHeroSection = ({ setSearchQuery }) => {
     <section className="w-full py-14 px-4 lg:px-16">
       <div className="max-w-4xl mx-auto text-center">
         <h1 className="text-3xl lg:text-4xl font-bold text-green-600 mb-4">
-          🧊 Your Virtual Fridge
+          Fridge
         </h1>
         <p className="text-gray-700 mb-8 text-lg">
           Easily search and manage your stored food items.

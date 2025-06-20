@@ -11,6 +11,7 @@ import { singleFoodLoader } from "../loaders/singleFoodLoader";
 import MyProfile from "../pages/MyProfile";
 import MyItem from "../pages/MyItem";
 import Details from "../pages/Details";
+import UpdateItem from "../pages/UpdateItem";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,15 @@ const router = createBrowserRouter([
             <AddItem />
           </PrivateRoute>
         ),
+      },
+      {
+        path: "update-item/:id",
+        element: (
+          <PrivateRoute>
+            <UpdateItem />
+          </PrivateRoute>
+        ),
+        loader: singleFoodLoader,
       },
       {
         path: "my-item",
