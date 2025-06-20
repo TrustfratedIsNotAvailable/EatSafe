@@ -7,8 +7,8 @@ import MyFoodSummary from "../components/others/MyFoodSummary";
 
 const MyProfile = () => {
   const { user, updateUserProfile, setUser } = useAuth();
-  const [displayName, setDisplayName] = useState(user?.displayName || "");
-  const [photoURL, setPhotoURL] = useState(user?.photoURL || "");
+  const [displayName, setDisplayName] = useState(user?.displayName);
+  const [photoURL, setPhotoURL] = useState(user?.photoURL);
   const [loading, setLoading] = useState(false);
 
   const handleUpdate = async (e) => {
@@ -79,9 +79,11 @@ const MyProfile = () => {
           <img
             src={photoURL}
             alt="Profile"
+            loading="lazy"
             className="w-24 h-24 rounded-full border-4 border-green-500 object-cover"
           />
         </div>
+
         <h3 className="mt-4 font-bold text-lg">{displayName}</h3>
         <p className="text-gray-600">Email: {user.email}</p>
 

@@ -21,7 +21,7 @@ const UserMenu = ({ user, logout }) => {
       >
         <div className="w-10 rounded-full">
           <img
-            src={user?.photoURL || "/images/avatar.avif"}
+            src={user?.photoURL}
             alt="User avatar"
           />
         </div>
@@ -31,7 +31,7 @@ const UserMenu = ({ user, logout }) => {
         className={`menu menu-sm dropdown-content mt-3 z-[1] p-3 shadow-lg rounded-box w-56 space-y-1 bg-gray-50`}
       >
         <li>
-          <Link to="/profile">Profile</Link>
+          <Link to="/my-profile">Profile</Link>
         </li>
         <li>
           <button onClick={logout} className="text-red-500">

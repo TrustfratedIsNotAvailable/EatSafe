@@ -18,7 +18,7 @@ const Navbar = () => {
       {/* Desktop Menu */}
       <div className="hidden md:flex gap-8 items-center">
         <div className="flex items-center space-x-2">
-          <img src="./images/logo.png" alt="logo" className="h-8" />
+          <img src="/images/logo.png" alt="logo" className="h-8" />
           <h1 className="text-[#1B5E20] font-bold text-xl">EatSafe</h1>
         </div>
         <HorizontalNav />

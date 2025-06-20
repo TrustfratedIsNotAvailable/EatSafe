@@ -7,9 +7,10 @@ import AddItem from "../pages/AddItem";
 import PrivateRoute from "./PrivateRoute";
 import Fridge from "../pages/Fridge";
 import { foodLoader } from "../loaders/foodLoader";
+import { singleFoodLoader } from "../loaders/singleFoodLoader";
 import MyProfile from "../pages/MyProfile";
 import MyItem from "../pages/MyItem";
-import { myItemLoader } from "../loaders/myItemLoader";
+import Details from "../pages/Details";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,15 @@ const router = createBrowserRouter([
             <MyItem />
           </PrivateRoute>
         ),
+      },
+      {
+        path: "details/:id",
+        element: (
+          <PrivateRoute>
+            <Details />
+          </PrivateRoute>
+        ),
+        loader: singleFoodLoader,
       },
       {
         path: "my-profile",

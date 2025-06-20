@@ -56,7 +56,7 @@ const SidebarDrawer = () => {
         {/* Header */}
         <div className="flex justify-between items-center p-4">
           <div className="flex items-center space-x-2">
-            <img src="./images/logo.png" alt="logo" className="h-8" />
+            <img src="/images/logo.png" alt="logo" className="h-8" />
             <h1 className="text-[#1B5E20] font-bold text-xl">EatSafe</h1>
           </div>
           <button onClick={toggleDrawer} aria-label="Close menu">
