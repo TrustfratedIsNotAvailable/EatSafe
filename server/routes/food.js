@@ -1,47 +1,66 @@
 const express = require("express");
 const router = express.Router();
 const { ObjectId } = require("mongodb");
+const calculateStatus = require("../utils/calculateStatus");
 
-
-//get all food
+//get all
 router.get("/", async (req, res) => {
   try {
     const query = {};
-
     if (req.query.userEmail) {
       query.userEmail = req.query.userEmail;
     }
 
     const foods = await req.foodCollection.find(query).toArray();
-    res.send(foods);
+
+    // Recalculate status before sending
+    const updatedFoods = foods.map((food) => ({
+      ...food,
+      status: calculateStatus(food.expiryDate),
+    }));
+
+    res.send(updatedFoods);
   } catch (error) {
     console.error("Error fetching food items:", error);
     res.status(500).send({ error: "Failed to fetch food items." });
   }
 });
 
-//get single food
+//get single
 router.get("/:id", async (req, res) => {
   const id = req.params.id;
   const query = { _id: new ObjectId(id) };
   const food = await req.foodCollection.findOne(query);
+
   if (!food) {
     return res.status(404).json({ message: "Food not found" });
   }
+
+  // Recalculate status
+  food.status = calculateStatus(food.expiryDate);
   res.json(food);
 });
 
-//add new food
+//add new
 router.post("/", async (req, res) => {
   const newFood = req.body;
+
+  // Calculate status before
+  newFood.status = calculateStatus(newFood.expiryDate);
+
   const result = await req.foodCollection.insertOne(newFood);
   res.send(result);
 });
 
-// Update a food
+// Update
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const updatedData = req.body;
+
+  // Recalculate status
+  if (updatedData.expiryDate) {
+    updatedData.status = calculateStatus(updatedData.expiryDate);
+  }
 
   try {
     const result = await req.foodCollection.updateOne(
@@ -59,7 +78,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Delete a food
+// Delete
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
 
