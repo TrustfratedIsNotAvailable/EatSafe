@@ -4,8 +4,10 @@ import FridgeCards from "../components/fridge/FridgeCards";
 import FridgePagination from "../components/fridge/FridgePagination";
 import FridgeFilterSort from "../components/fridge/FridgeFilterSort";
 import { useLoaderData } from "react-router";
+import { useTheme } from "../hooks/ThemeContext";
 
 const Fridge = () => {
+  const { theme } = useTheme();
   const food = useLoaderData();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,15 +29,12 @@ const Fridge = () => {
     "other",
   ];
 
-  // Filter, Search & Sort Logic
   const filteredAndSortedFood = useMemo(() => {
-    //filter
     let filtered =
       selectedCategory === "All Categories"
         ? [...food]
         : food.filter((item) => item.category === selectedCategory);
 
-    //search
     if (searchQuery.trim() !== "") {
       const q = searchQuery.toLowerCase();
       filtered = filtered.filter((item) =>
@@ -43,7 +42,6 @@ const Fridge = () => {
       );
     }
 
-    //sort
     switch (sortOption) {
       case "expiry-asc":
         filtered.sort(
@@ -62,7 +60,6 @@ const Fridge = () => {
     return filtered;
   }, [food, sortOption, selectedCategory, searchQuery]);
 
-  // Pagination
   const itemsPerPage = 12;
   const totalItems = filteredAndSortedFood.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -70,8 +67,12 @@ const Fridge = () => {
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
   const currentItems = filteredAndSortedFood.slice(startIndex, endIndex);
 
+  const isDark = theme === "dark";
+
   return (
-    <>
+    <div
+      className={isDark ? "bg-gray-900 text-white" : "bg-white text-gray-900"}
+    >
       <FridgeHeroSection
         searchQuery={searchQuery}
         setSearchQuery={(val) => {
@@ -96,7 +97,7 @@ const Fridge = () => {
         />
 
         {/* Cards */}
-        <FridgeCards currentItems={currentItems} />
+        <FridgeCards currentItems={currentItems} theme={theme} />
 
         {/* Pagination */}
         {currentItems.length !== 0 && (
@@ -107,7 +108,7 @@ const Fridge = () => {
           />
         )}
       </div>
-    </>
+    </div>
   );
 };
 

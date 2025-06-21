@@ -1,13 +1,30 @@
 import React from "react";
+import { useTheme } from "../../hooks/ThemeContext"; // adjust path as needed
 
 const FridgePagination = ({ totalPages, currentPage, setCurrentPage }) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
+  const baseBtnClass = "btn btn-sm transition-colors duration-200";
+  const disabledBtnClass = `${baseBtnClass} btn-disabled`;
+
+  const btnBgClass = isDark ? "bg-gray-700" : "bg-base-300";
+  const btnActiveClass = isDark ? "btn-primary" : "btn-primary"; // keep btn-primary same for both themes
+
+  const inputBgClass = isDark ? "bg-gray-800 text-gray-200 placeholder-gray-400" : "bg-white text-gray-700 placeholder-gray-500";
+  const inputBorderClass = isDark ? "input-bordered border-gray-600 focus:ring-green-600" : "input-bordered border-gray-300 focus:ring-[#1B5E20]";
+
+  const goBtnClass = isDark
+    ? "btn btn-sm bg-green-700 hover:bg-green-800 text-white"
+    : "btn btn-sm bg-[#43AF50] hover:bg-green-600 text-white";
+
   return (
-    <div className="flex flex-col items-center mt-8 gap-3">
+    <div className={`flex flex-col items-center mt-8 gap-3 text-${isDark ? "gray-300" : "gray-700"}`}>
       <div className="flex flex-wrap justify-center items-center gap-2">
         <button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
-          className="btn btn-sm bg-base-300"
+          className={`${baseBtnClass} ${btnBgClass}`}
         >
           Prev
         </button>
@@ -26,15 +43,15 @@ const FridgePagination = ({ totalPages, currentPage, setCurrentPage }) => {
           }, [])
           .map((page, i) =>
             page === "ellipsis" ? (
-              <span key={i} className="btn btn-sm btn-disabled">
+              <span key={i} className={disabledBtnClass}>
                 ...
               </span>
             ) : (
               <button
                 key={i}
                 onClick={() => setCurrentPage(page)}
-                className={`btn btn-sm ${
-                  currentPage === page ? "btn-primary" : "bg-base-300"
+                className={`${baseBtnClass} ${
+                  currentPage === page ? btnActiveClass : btnBgClass
                 }`}
               >
                 {page}
@@ -47,7 +64,7 @@ const FridgePagination = ({ totalPages, currentPage, setCurrentPage }) => {
             setCurrentPage((prev) => Math.min(prev + 1, totalPages))
           }
           disabled={currentPage === totalPages}
-          className="btn btn-sm bg-base-300"
+          className={`${baseBtnClass} ${btnBgClass}`}
         >
           Next
         </button>
@@ -70,9 +87,9 @@ const FridgePagination = ({ totalPages, currentPage, setCurrentPage }) => {
           min="1"
           max={totalPages}
           placeholder="Go to"
-          className="input input-sm input-bordered focus:outline-none focus:ring-2 focus:ring-[#1B5E20] w-20"
+          className={`input input-sm ${inputBorderClass} focus:outline-none w-20 ${inputBgClass}`}
         />
-        <button type="submit" className="btn btn-sm bg-[#43AF50]">
+        <button type="submit" className={goBtnClass}>
           Go
         </button>
       </form>

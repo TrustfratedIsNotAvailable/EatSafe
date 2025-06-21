@@ -1,17 +1,21 @@
-import { Link } from "react-router";
+import React from "react";
+import { Link, useLocation, useNavigate } from "react-router";
 import Lottie from "lottie-react";
 import { FcGoogle } from "react-icons/fc";
 import loginAnimation from "../assets/login-animation.json";
-import { useLocation, useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../hooks/ThemeContext";
 import toast from "react-hot-toast";
 import axios from "axios";
 
 const Login = () => {
   const { login, googleSignIn } = useAuth();
+  const { theme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+
+  const isDark = theme === "dark";
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -22,12 +26,12 @@ const Login = () => {
     const password = formData.get("password");
 
     login(email, password)
-      .then((res) => {
+      .then(() => {
         toast.success("Login success");
         navigate(from, { replace: true });
         form.reset();
       })
-      .catch((err) => toast.error("Login Failed"));
+      .catch(() => toast.error("Login Failed"));
   };
 
   const handleGoogleLogin = () => {
@@ -41,45 +45,50 @@ const Login = () => {
           uid: user.uid,
         };
 
-        // Try to get the user by UID
         axios
-          .get(
-            `https://eatsafe-server.vercel.app/users/${user.uid}`
-            // `${import.meta.env.VITE_API_URL}/users/${user.uid}`
-          )
-          .then((res) => {
-            // If user exists, proceed
+          .get(`https://eatsafe-server.vercel.app/users/${user.uid}`)
+          .then(() => {
             toast.success("Logged in successfully!");
             navigate("/");
           })
           .catch((err) => {
             if (err.response && err.response.status === 404) {
-              // User not found, add them
               axios
-                .post(
-                  "https://eatsafe-server.vercel.app/users"
-                  // `${import.meta.env.VITE_API_URL}/users`
-                  , savedUser)
+                .post("https://eatsafe-server.vercel.app/users", savedUser)
                 .then(() => {
                   toast.success("User created & logged in!");
                   navigate("/");
                 })
-                .catch((error) => toast.error("Failed to save user"));
+                .catch(() => toast.error("Failed to save user"));
             } else {
               toast.error("Something went wrong");
             }
           });
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error("Google login failed");
       });
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white px-4">
-      <div className="max-w-6xl w-full bg-white shadow-[#43AF50] shadow-lg p-6 rounded-lg flex flex-col md:flex-row items-center justify-between gap-8">
+    <div
+      className={`${
+        isDark ? "bg-gray-900 text-white" : "bg-white text-gray-900"
+      } min-h-screen flex items-center justify-center px-4`}
+    >
+      <div
+        className={`${
+          isDark ? "bg-gray-800 shadow-gray-600" : "bg-white shadow-[#43AF50]"
+        } max-w-6xl w-full shadow-lg p-6 rounded-lg flex flex-col md:flex-row items-center justify-between gap-8`}
+      >
         {/* Left: Lottie Animation */}
-        <div className="w-full md:w-1/2 flex items-center justify-center">
+        {/* <div className="w-full md:w-1/2 flex items-center justify-center">
+          <div className="w-72 h-72 md:w-96 md:h-96">
+            <Lottie animationData={loginAnimation} loop={true} />
+          </div>
+        </div> */}
+
+        <div className="hidden md:flex w-full md:w-1/2 items-center justify-center">
           <div className="w-72 h-72 md:w-96 md:h-96">
             <Lottie animationData={loginAnimation} loop={true} />
           </div>
@@ -90,26 +99,34 @@ const Login = () => {
           <div className="w-full max-w-xs sm:max-w-sm">
             <img
               src="./images/logo.png"
-              alt="EmpowerHer"
-              className="h-16 mb-2 mx-auto"
+              alt="EatSafe"
+              className={`h-16 mb-2 mx-auto ${
+                isDark ? "bg-white rounded-lg" : ""
+              }`}
             />
-            <h2 className="text-[#1B5E20] font-bold text-2xl mb-2">EatSafe</h2>
-            <h3 className="text-black font-semibold text-lg mb-1">
-              Welcome back!
-            </h3>
-            <p className="text-gray-600 mb-6">Please Login To Your Account</p>
+            <h2
+              className={`font-bold text-2xl mb-2  ${
+                isDark ? "text-white" : "text-[#1B5E20]"
+              }`}
+            >
+              EatSafe
+            </h2>
+            <h3 className="font-semibold text-lg mb-1">Welcome back!</h3>
+            <p className="text-gray-500 mb-6">Please Login To Your Account</p>
 
             {/* Google Login */}
             <div className="mb-4">
               <button
                 onClick={handleGoogleLogin}
                 type="button"
-                className="flex items-center justify-center gap-3 w-full border border-gray-300 py-2 rounded-md hover:bg-gray-100 transition"
+                className={`${
+                  isDark
+                    ? "bg-gray-700 hover:bg-gray-600 text-white"
+                    : "border border-gray-300 hover:bg-gray-100 text-gray-700"
+                } flex items-center justify-center gap-3 w-full py-2 rounded-md transition`}
               >
                 <FcGoogle className="text-xl" />
-                <span className="text-sm text-gray-700">
-                  Continue with Google
-                </span>
+                <span className="text-sm">Continue with Google</span>
               </button>
             </div>
 
@@ -126,14 +143,22 @@ const Login = () => {
                 type="email"
                 name="email"
                 placeholder="Email"
-                className="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B5E20]"
+                className={`${
+                  isDark
+                    ? "bg-gray-700 border-gray-600 text-white"
+                    : "bg-white border-gray-300 text-black"
+                } border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B5E20]`}
                 required
               />
               <input
                 type="password"
                 name="password"
                 placeholder="Password"
-                className="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B5E20]"
+                className={`${
+                  isDark
+                    ? "bg-gray-700 border-gray-600 text-white"
+                    : "bg-white border-gray-300 text-black"
+                } border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B5E20]`}
                 required
               />
               <input
@@ -152,7 +177,7 @@ const Login = () => {
                 Don’t have an account?
                 <Link
                   to="/register"
-                  className="text-[#1B5E20] hover:underline font-semibold"
+                  className="text-[#1B5E20] hover:underline font-semibold ml-1"
                 >
                   Sign Up
                 </Link>

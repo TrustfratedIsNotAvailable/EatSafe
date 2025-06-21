@@ -10,10 +10,13 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import { Link } from "react-router";
+import { useTheme } from "../../hooks/ThemeContext";
 
 const FoodTable = ({ myItems, setMyItems }) => {
-  const columnHelper = createColumnHelper();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
+  const columnHelper = createColumnHelper();
   const [pageIndex, setPageIndex] = useState(0);
   const pageSize = 6;
 
@@ -33,7 +36,6 @@ const FoodTable = ({ myItems, setMyItems }) => {
       try {
         const res = await axios.delete(
           `https://eatsafe-server.vercel.app/food/${id}`
-          // `${import.meta.env.VITE_API_URL}/food/${id}`
         );
 
         if (res.data.success) {
@@ -119,16 +121,28 @@ const FoodTable = ({ myItems, setMyItems }) => {
     manualPagination: false,
   });
 
+  // Dynamic class mappings based on theme
+  const headerBg = isDark
+    ? "bg-gray-800 text-white"
+    : "bg-white text-[#1B5E20]";
+  const rowBorder = isDark ? "border-gray-700" : "border-b-gray-200";
+  const paginationText = isDark ? "text-gray-300" : "text-gray-600";
+  const btnBg = isDark ? "bg-gray-700 text-white" : "bg-gray-200 text-black";
+
   return (
-    <div className="overflow-x-auto rounded-lg border border-gray-300">
+    <div
+      className={`overflow-x-auto rounded-lg border ${
+        isDark ? "border-gray-700" : "border-gray-300"
+      }`}
+    >
       <table className="min-w-full table-auto">
-        <thead className="bg-base-200">
+        <thead className={`${headerBg}`}>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
-                  className="py-5 px-4 text-[#1B5E20] text-left bg-white border-b border-gray-100"
+                  className={`py-5 px-4 text-left border-b ${rowBorder}`}
                 >
                   {flexRender(
                     header.column.columnDef.header,
@@ -149,7 +163,7 @@ const FoodTable = ({ myItems, setMyItems }) => {
                   : row.original.status === "nearly expired"
                   ? "border-yellow-500 bg-yellow-100 hover:bg-yellow-200"
                   : "border-green-500 hover:bg-green-200"
-              } hover:bg-opacity-90 border-b border-b-gray-200`}
+              } hover:bg-opacity-90 ${rowBorder}`}
             >
               {row.getVisibleCells().map((cell) => (
                 <td key={cell.id} className="py-2 px-4">
@@ -165,11 +179,11 @@ const FoodTable = ({ myItems, setMyItems }) => {
         <button
           onClick={() => setPageIndex((old) => Math.max(old - 1, 0))}
           disabled={pageIndex === 0}
-          className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+          className={`px-3 py-1 rounded disabled:opacity-50 ${btnBg}`}
         >
           Previous
         </button>
-        <span className="text-sm text-gray-600">
+        <span className={`text-sm ${paginationText}`}>
           Page {pageIndex + 1} of {Math.ceil(myItems.length / pageSize)}
         </span>
         <button
@@ -179,7 +193,7 @@ const FoodTable = ({ myItems, setMyItems }) => {
             )
           }
           disabled={pageIndex + 1 >= Math.ceil(myItems.length / pageSize)}
-          className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+          className={`px-3 py-1 rounded disabled:opacity-50 ${btnBg}`}
         >
           Next
         </button>

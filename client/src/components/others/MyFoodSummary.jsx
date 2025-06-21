@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useAuth } from "../../context/AuthContext";
+import { useTheme } from "../../hooks/ThemeContext";
 
 const COLORS = [
   "#0088FE",
@@ -25,6 +26,9 @@ const COLORS = [
 
 const MyFoodSummary = () => {
   const { user } = useAuth();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
   const [chartData, setChartData] = useState([]);
   const [total, setTotal] = useState(0);
 
@@ -33,7 +37,6 @@ const MyFoodSummary = () => {
       try {
         const res = await axios.get(
           `https://eatsafe-server.vercel.app/?userEmail=${user.email}`
-          // `${import.meta.env.VITE_API_URL}/?userEmail=${user.email}`
         );
         const foodList = res.data;
 
@@ -59,11 +62,22 @@ const MyFoodSummary = () => {
     }
   }, [user]);
 
+  // Dynamic theme styles
+  const containerBg = isDark ? "bg-gray-900" : "bg-white";
+  const textPrimary = isDark ? "text-blue-300" : "text-blue-600";
+  const totalText = isDark ? "text-white" : "text-black";
+  const noDataText = isDark ? "text-gray-400" : "text-gray-500";
+  const cardShadow = isDark ? "shadow-lg shadow-gray-800" : "shadow";
+
   return (
-    <div className="w-full text-center p-6 max-w-3xl mx-auto bg-white shadow rounded-2xl mt-10">
-      <h2 className="text-2xl font-bold text-blue-600 mb-2">My Food Summary</h2>
+    <div
+      className={`w-full text-center p-6 max-w-3xl mx-auto rounded-2xl mt-10 transition-colors duration-300 ${containerBg} ${cardShadow}`}
+    >
+      <h2 className={`text-2xl font-bold mb-2 ${textPrimary}`}>
+        My Food Summary
+      </h2>
       <p className="text-lg font-semibold mb-6">
-        Total Foods: <span className="text-black">{total}</span>
+        Total Foods: <span className={totalText}>{total}</span>
       </p>
 
       {total > 0 ? (
@@ -83,17 +97,27 @@ const MyFoodSummary = () => {
                   <Cell key={index} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: isDark ? "#2e2e2e" : "#ffffff",
+                  color: isDark ? "#ffffff" : "#000000",
+                }}
+              />
               <Legend
                 layout="horizontal"
                 verticalAlign="bottom"
                 align="center"
+                wrapperStyle={{
+                  color: isDark ? "#ffffff" : "#000000",
+                }}
               />
             </PieChart>
           </ResponsiveContainer>
         </div>
       ) : (
-        <p className="text-gray-500 mt-6">No food data available to display.</p>
+        <p className={`mt-6 ${noDataText}`}>
+          No food data available to display.
+        </p>
       )}
     </div>
   );

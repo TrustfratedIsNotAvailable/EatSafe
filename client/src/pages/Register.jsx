@@ -1,14 +1,18 @@
+import React from "react";
 import { Link, useNavigate } from "react-router";
 import Lottie from "lottie-react";
 import registerAnimation from "../assets/register-animation.json";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../hooks/ThemeContext";
 import { auth } from "../firebase.config";
 import toast from "react-hot-toast";
 import axios from "axios";
 
 const Register = () => {
   const { setUser, updateUserProfile, register } = useAuth();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -26,33 +30,25 @@ const Register = () => {
       formData.entries()
     );
 
-    if (!validateName(name)) {
+    if (!validateName(name))
       return setError("Name must be between 2 and 20 characters.");
-    }
-    if (!validateEmail(email)) {
-      return setError("Invalid email address.");
-    }
-    if (!validateURL(photo)) {
-      return setError("Invalid photo URL.");
-    }
-    if (!validatePassword(password)) {
+    if (!validateEmail(email)) return setError("Invalid email address.");
+    if (!validateURL(photo)) return setError("Invalid photo URL.");
+    if (!validatePassword(password))
       return setError(
         "Password must be at least 6 characters and include both uppercase and lowercase letters."
       );
-    }
-    if (password !== confirmPass) {
-      return setError("Passwords do not match.");
-    }
+    if (password !== confirmPass) return setError("Passwords do not match.");
 
     setError("");
 
     register(email, password)
-      .then(() => {
-        return updateUserProfile({
+      .then(() =>
+        updateUserProfile({
           displayName: name.trim() || "Anonymous",
           photoURL: photo.trim() || "/images/logo.png",
-        });
-      })
+        })
+      )
       .then(() => {
         const updatedUser = {
           ...auth.currentUser,
@@ -69,10 +65,7 @@ const Register = () => {
           uid: updatedUser.uid,
         };
 
-        return axios.post(
-          "https://eatsafe-server.vercel.app/users"
-          // `${import.meta.env.VITE_API_URL}/users`
-          , savedUser);
+        return axios.post("https://eatsafe-server.vercel.app/users", savedUser);
       })
       .then(() => {
         toast.success("Account created successfully!");
@@ -83,28 +76,54 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white px-4">
-      <div className="max-w-6xl w-full bg-white shadow-[#43AF50] shadow-lg p-6 rounded-lg flex flex-col md:flex-row items-center justify-between gap-8">
+    <div
+      className={`min-h-screen flex items-center justify-center px-4 ${
+        isDark ? "bg-gray-900 text-white" : "bg-white text-gray-900"
+      }`}
+    >
+      <div
+        className={`max-w-6xl w-full p-6 rounded-lg flex flex-col md:flex-row items-center justify-between gap-8 shadow-lg ${
+          isDark ? "bg-gray-800 shadow-green-700" : "bg-white shadow-[#43AF50]"
+        }`}
+      >
         {/* Left: Lottie Animation */}
-        <div className="w-full md:w-1/2 flex items-center justify-center">
+        {/* <div className="w-full md:w-1/2 flex items-center justify-center">
           <div className="w-72 h-72 md:w-96 md:h-96">
             <Lottie animationData={registerAnimation} loop={true} />
           </div>
-        </div>
+        </div> */}
+        <div className="hidden md:flex w-full md:w-1/2 items-center justify-center">
+  <div className="w-72 h-72 md:w-96 md:h-96">
+    <Lottie animationData={registerAnimation} loop={true} />
+  </div>
+</div>
+
 
         {/* Right: Register Form */}
         <div className="w-full md:w-1/2 text-center flex flex-col items-center">
           <div className="w-full max-w-xs sm:max-w-sm">
             <img
               src="./images/logo.png"
-              alt="EmpowerHer"
-              className="h-16 mb-2 mx-auto"
+              alt="EatSafe"
+              className={`h-16 mb-2 mx-auto ${
+                isDark ? "bg-white rounded-lg" : ""
+              }`}
             />
-            <h2 className="text-[#1B5E20] font-bold text-2xl mb-2">EatSafe</h2>
-            <h3 className="text-black font-semibold text-lg mb-1">
+            <h2
+              className={`font-bold text-2xl mb-2  ${
+                isDark ? "text-white" : "text-[#1B5E20]"
+              }`}
+            >
+              EatSafe
+            </h2>
+            <h3
+              className={`font-semibold text-lg mb-1 ${
+                isDark ? "text-white" : "text-black"
+              }`}
+            >
               Create your account
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className={`mb-6 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
               Please create your account to get started
             </p>
 
@@ -113,41 +132,32 @@ const Register = () => {
             )}
 
             <form onSubmit={handleRegister} className="flex flex-col gap-4">
-              <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                className="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B5E20]"
-                required
-              />
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                className="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B5E20]"
-                required
-              />
-              <input
-                type="url"
-                name="photo"
-                placeholder="Photo URL"
-                className="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B5E20]"
-                required
-              />
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                className="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B5E20]"
-                required
-              />
-              <input
-                type="password"
-                name="confirmPass"
-                placeholder="Confirm Password"
-                className="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B5E20]"
-                required
-              />
+              {["name", "email", "photo", "password", "confirmPass"].map(
+                (field) => (
+                  <input
+                    key={field}
+                    type={
+                      field.includes("password")
+                        ? "password"
+                        : field === "photo"
+                        ? "url"
+                        : "text"
+                    }
+                    name={field}
+                    placeholder={
+                      field === "confirmPass"
+                        ? "Confirm Password"
+                        : field.charAt(0).toUpperCase() + field.slice(1)
+                    }
+                    required
+                    className={`rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B5E20] ${
+                      isDark
+                        ? "bg-gray-700 text-white border border-gray-600"
+                        : "border border-gray-300"
+                    }`}
+                  />
+                )
+              )}
 
               <input
                 type="submit"
@@ -157,7 +167,9 @@ const Register = () => {
             </form>
 
             <div className="mt-4 text-sm">
-              <span className="text-gray-500">Already have an account?</span>{" "}
+              <span className={`${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                Already have an account?
+              </span>{" "}
               <Link
                 to="/login"
                 className="text-[#1B5E20] font-semibold hover:underline"

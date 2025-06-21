@@ -1,7 +1,11 @@
 import React from "react";
 import { Link } from "react-router";
+import { useTheme } from "../../hooks/ThemeContext";
 
 const UserMenu = ({ user, logout }) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
   if (!user) {
     return (
       <Link
@@ -12,6 +16,7 @@ const UserMenu = ({ user, logout }) => {
       </Link>
     );
   }
+
   return (
     <div className="dropdown dropdown-end">
       <button
@@ -20,21 +25,28 @@ const UserMenu = ({ user, logout }) => {
         aria-label="User menu"
       >
         <div className="w-10 rounded-full">
-          <img
-            src={user?.photoURL}
-            alt="User avatar"
-          />
+          <img src={user?.photoURL} alt="User avatar" />
         </div>
       </button>
       <ul
         tabIndex={0}
-        className={`menu menu-sm dropdown-content mt-3 z-[1] p-3 shadow-lg rounded-box w-56 space-y-1 bg-gray-50`}
+        className={`menu menu-sm dropdown-content mt-3 z-[1] p-3 shadow-lg rounded-box w-56 space-y-1 ${
+          isDark ? "bg-gray-800 text-white" : "bg-gray-50 text-black"
+        }`}
       >
         <li>
-          <Link to="/my-profile">Profile</Link>
+          <Link
+            to="/my-profile"
+            className={`hover:bg-gray-200 dark:hover:bg-gray-700 rounded px-2 py-1`}
+          >
+            Profile
+          </Link>
         </li>
         <li>
-          <button onClick={logout} className="text-red-500">
+          <button
+            onClick={logout}
+            className="text-red-500 hover:underline hover:text-red-600"
+          >
             Logout
           </button>
         </li>

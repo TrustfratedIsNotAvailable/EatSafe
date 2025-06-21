@@ -1,12 +1,17 @@
-// ThemeContext.js
 import { createContext, useContext, useEffect, useState } from "react";
 
 const ThemeContext = createContext();
 
+const getInitialTheme = () => {
+  const stored = localStorage.getItem("theme");
+  if (stored) return stored;
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+};
+
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(() =>
-    localStorage.getItem("theme") || "light"
-  );
+  const [theme, setTheme] = useState(getInitialTheme);
 
   useEffect(() => {
     const root = window.document.documentElement;

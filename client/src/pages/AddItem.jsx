@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../hooks/ThemeContext";
 import axios from "axios";
 
 const AddItem = () => {
   const { user } = useAuth();
+  const { theme } = useTheme();
 
   const [errors, setErrors] = useState({});
-
   const [formData, setFormData] = useState({
     foodImage: "",
     title: "",
@@ -32,14 +33,12 @@ const AddItem = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
-
     const validateImageURL = (url) => /^(http|https):\/\/[^ "]+$/.test(url);
 
     if (!formData.foodImage.trim()) {
       newErrors.foodImage = "Image URL is required.";
     } else if (!validateImageURL(formData.foodImage.trim())) {
-      newErrors.foodImage =
-        "Please enter a valid image URL (ending in .jpg, .png, etc).";
+      newErrors.foodImage = "Please enter a valid image URL.";
     }
     if (!formData.title.trim()) newErrors.title = "Title is required.";
     if (!formData.category.trim()) newErrors.category = "Category is required.";
@@ -53,7 +52,6 @@ const AddItem = () => {
       return;
     }
 
-    // Add user info to form data
     const payload = {
       ...formData,
       userEmail: user?.email,
@@ -61,10 +59,7 @@ const AddItem = () => {
     };
 
     try {
-      const response = await axios.post(
-        "https://eatsafe-server.vercel.app/food"
-        // `${import.meta.env.VITE_API_URL}/food`
-        , payload);
+      await axios.post("https://eatsafe-server.vercel.app/food", payload);
       toast.success("Item added successfully!");
       setFormData({
         foodImage: "",
@@ -77,7 +72,6 @@ const AddItem = () => {
         userEmail: "",
         uid: "",
       });
-
       setErrors({});
     } catch (error) {
       console.error("Error adding item:", error);
@@ -98,8 +92,13 @@ const AddItem = () => {
     "other",
   ];
 
+  const darkClass = theme === "dark";
+
   return (
-    <div className="w-full px-4 md:px-8 max-w-3xl mx-auto mt-10 bg-gray-100 p-6 rounded-xl shadow-md">
+    <div
+      className={`w-full px-4 md:px-8 max-w-3xl mx-auto my-10 p-6 rounded-xl shadow-md transition 
+      ${darkClass ? "bg-gray-900 text-white" : "bg-gray-100 text-black"}`}
+    >
       <h2 className="text-3xl font-bold text-green-600 text-center mb-4">
         Add New Food Item
       </h2>
@@ -107,6 +106,7 @@ const AddItem = () => {
         Fill up the Details page to add Foods!
       </p>
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* All inputs below */}
         <div>
           <label className="label font-medium">Food Title</label>
           <input
@@ -114,12 +114,16 @@ const AddItem = () => {
             name="title"
             value={formData.title}
             onChange={handleChange}
-            className="input w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B5E20] mt-1"
+            className={`w-full border rounded px-4 py-2 mt-1 focus:outline-none focus:ring-2 ${
+              darkClass
+                ? "bg-gray-800 text-white border-gray-700 focus:ring-green-500"
+                : "bg-white border-gray-300 focus:ring-[#1B5E20]"
+            }`}
             placeholder="Enter food title"
             required
           />
           {errors.title && (
-            <p className="text-red-500 text-sm mt-1">{errors.title}</p>
+            <p className="text-red-400 text-sm mt-1">{errors.title}</p>
           )}
         </div>
 
@@ -130,7 +134,11 @@ const AddItem = () => {
             name="foodImage"
             value={formData.foodImage}
             onChange={handleChange}
-            className="input w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B5E20] mt-1"
+            className={`w-full border rounded px-4 py-2 mt-1 focus:outline-none focus:ring-2 ${
+              darkClass
+                ? "bg-gray-800 text-white border-gray-700 focus:ring-green-500"
+                : "bg-white border-gray-300 focus:ring-[#1B5E20]"
+            }`}
             placeholder="Paste image URL"
             required
           />
@@ -145,7 +153,11 @@ const AddItem = () => {
             name="category"
             value={formData.category}
             onChange={handleChange}
-            className="select w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B5E20] mt-1"
+            className={`select w-full border rounded px-4 py-2 mt-1 focus:outline-none focus:ring-2 ${
+              darkClass
+                ? "bg-gray-800 text-white border-gray-700 focus:ring-green-500"
+                : "bg-white border-gray-300 focus:ring-[#1B5E20]"
+            }`}
             required
           >
             <option value="">Select Category</option>
@@ -165,7 +177,11 @@ const AddItem = () => {
             name="quantity"
             value={formData.quantity}
             onChange={handleChange}
-            className="select w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B5E20] mt-1"
+            className={`select w-full border rounded px-4 py-2 mt-1 focus:outline-none focus:ring-2 ${
+              darkClass
+                ? "bg-gray-800 text-white border-gray-700 focus:ring-green-500"
+                : "bg-white border-gray-300 focus:ring-[#1B5E20]"
+            }`}
             min="1"
             placeholder="e.g. 3"
             required
@@ -182,7 +198,11 @@ const AddItem = () => {
             name="expiryDate"
             value={formData.expiryDate}
             onChange={handleChange}
-            className="input w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B5E20] mt-1"
+            className={`w-full border rounded px-4 py-2 mt-1 focus:outline-none focus:ring-2 ${
+              darkClass
+                ? "bg-gray-800 text-white border-gray-700 focus:ring-green-500"
+                : "bg-white border-gray-300 focus:ring-[#1B5E20]"
+            }`}
             required
           />
           {errors.expiryDate && (
@@ -196,7 +216,11 @@ const AddItem = () => {
             name="description"
             value={formData.description}
             onChange={handleChange}
-            className="textarea w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B5E20] mt-1"
+            className={`textarea w-full border rounded px-4 py-2 mt-1 focus:outline-none focus:ring-2 ${
+              darkClass
+                ? "bg-gray-800 text-white border-gray-700 focus:ring-green-500"
+                : "bg-white border-gray-300 focus:ring-[#1B5E20]"
+            }`}
             rows="3"
             placeholder="Write short description about the item"
           />
@@ -204,7 +228,11 @@ const AddItem = () => {
 
         <button
           type="submit"
-          className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded-lg transition duration-200"
+          className={`w-full font-semibold py-2 rounded-lg transition duration-200 ${
+            darkClass
+              ? "bg-green-700 hover:bg-green-600 text-white"
+              : "bg-green-500 hover:bg-green-600 text-white"
+          }`}
         >
           ➕ Add Item
         </button>

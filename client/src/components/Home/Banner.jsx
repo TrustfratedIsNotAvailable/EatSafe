@@ -1,3 +1,4 @@
+import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router";
 import bgImage from "../../assets/bg-banner-2.jpg";
