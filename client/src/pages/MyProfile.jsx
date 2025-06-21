@@ -45,9 +45,11 @@ const MyProfile = () => {
       // Local state update
       setUser({ ...user, displayName, photoURL });
 
-      // Axios DB update
+      // DB update
       const response = await axios.put(
-        `http://localhost:3000/users/${user.uid}`,
+        `https://eatsafe-server.vercel.app/users/${user.uid}`
+        // `${import.meta.env.VITE_API_URL}/users/${user.uid}`
+        ,
         {
           uid: user.uid,
           name: displayName,

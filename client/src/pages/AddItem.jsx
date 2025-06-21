@@ -61,7 +61,10 @@ const AddItem = () => {
     };
 
     try {
-      const response = await axios.post("http://localhost:3000/food", payload);
+      const response = await axios.post(
+        "https://eatsafe-server.vercel.app/food"
+        // `${import.meta.env.VITE_API_URL}/food`
+        , payload);
       toast.success("Item added successfully!");
       setFormData({
         foodImage: "",
@@ -97,7 +100,7 @@ const AddItem = () => {
 
   return (
     <div className="w-full px-4 md:px-8 max-w-3xl mx-auto mt-10 bg-gray-100 p-6 rounded-xl shadow-md">
-      <h2 className="text-3xl font-bold text-green-500 text-center mb-4">
+      <h2 className="text-3xl font-bold text-green-600 text-center mb-4">
         Add New Food Item
       </h2>
       <p className="text-center font-semibold text-xl mb-6">

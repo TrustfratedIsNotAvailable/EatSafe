@@ -43,7 +43,10 @@ const Login = () => {
 
         // Try to get the user by UID
         axios
-          .get(`http://localhost:3000/users/${user.uid}`)
+          .get(
+            `https://eatsafe-server.vercel.app/users/${user.uid}`
+            // `${import.meta.env.VITE_API_URL}/users/${user.uid}`
+          )
           .then((res) => {
             // If user exists, proceed
             toast.success("Logged in successfully!");
@@ -53,7 +56,10 @@ const Login = () => {
             if (err.response && err.response.status === 404) {
               // User not found, add them
               axios
-                .post("http://localhost:3000/users", savedUser)
+                .post(
+                  "https://eatsafe-server.vercel.app/users"
+                  // `${import.meta.env.VITE_API_URL}/users`
+                  , savedUser)
                 .then(() => {
                   toast.success("User created & logged in!");
                   navigate("/");

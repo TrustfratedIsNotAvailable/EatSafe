@@ -57,7 +57,9 @@ const UpdateItem = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:3000/food/${food._id}`,
+        `https://eatsafe-server.vercel.app/food/${food._id}`
+        // `${import.meta.env.VITE_API_URL}/food/${food._id}`
+        ,
         formData
       );
       toast.success("Item updated successfully!");

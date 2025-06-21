@@ -11,7 +11,8 @@ const Testimonials = () => {
     const fetchReviews = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:3000/reviews?limit=3&sort=desc"
+          "https://eatsafe-server.vercel.app/reviews?limit=3&sort=desc"
+          // `${import.meta.env.VITE_API_URL}/reviews?limit=3&sort=desc`
         );
         setReviews(res.data.slice(-3)); // Take last 3 reviews
       } catch (error) {

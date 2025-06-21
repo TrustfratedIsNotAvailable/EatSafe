@@ -10,7 +10,6 @@ import {
 import React, { createContext, use, useEffect, useState } from "react";
 import { auth } from "../firebase.config";
 import Spinner from "../components/shared/Spinner";
-// import Spinner from "../components/shared/Spinner";
 
 //create context
 const AuthContext = createContext();

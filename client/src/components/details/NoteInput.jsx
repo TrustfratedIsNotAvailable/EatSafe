@@ -17,7 +17,10 @@ const NoteInput = ({ foodId, isOwner, user, onNoteAdded }) => {
     };
 
     try {
-      await axios.post("http://localhost:3000/notes", newNote);
+      await axios.post(
+        "http://localhost:3000/notes"
+        // `${import.meta.env.VITE_API_URL}/notes`
+        , newNote);
       setNoteText("");
       setSuccess(true);
       setTimeout(() => setSuccess(false), 2000);

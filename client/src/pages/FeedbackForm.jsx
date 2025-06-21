@@ -32,7 +32,10 @@ const FeedbackForm = () => {
     };
 
     try {
-      const res = await axios.post("http://localhost:3000/reviews", feedback);
+      const res = await axios.post(
+        "https://eatsafe-server.vercel.app/reviews"
+        // `${import.meta.env.VITE_API_URL}/reviews`
+        , feedback);
       if (res.data.insertedId) {
         toast.success("Thanks for your review!");
         setReview("");

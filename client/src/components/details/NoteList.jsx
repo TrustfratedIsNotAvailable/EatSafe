@@ -21,7 +21,10 @@ const NoteList = ({ foodId, isOwner, notes, onNoteDeleted, user }) => {
 
   const handleLikeToggle = async (noteId) => {
     try {
-      await axios.put(`http://localhost:3000/notes/like/${noteId}`, {
+      await axios.put(
+        `http://localhost:3000/notes/like/${noteId}`
+        // `${import.meta.env.VITE_API_URL}/notes/like/${noteId}`
+        , {
         userEmail,
       });
 
@@ -50,7 +53,10 @@ const NoteList = ({ foodId, isOwner, notes, onNoteDeleted, user }) => {
 
     if (confirm.isConfirmed) {
       try {
-        await axios.delete(`http://localhost:3000/notes/${id}`);
+        await axios.delete(
+          `http://localhost:3000/notes/${id}`
+          // `${import.meta.env.VITE_API_URL}/notes/${id}`
+        );
         toast.success("Note deleted.");
         onNoteDeleted();
       } catch (error) {
@@ -62,7 +68,10 @@ const NoteList = ({ foodId, isOwner, notes, onNoteDeleted, user }) => {
 
   const handleUpdateNote = async () => {
     try {
-      await axios.put(`http://localhost:3000/notes/${editingNote._id}`, {
+      await axios.put(
+        `http://localhost:3000/notes/${editingNote._id}`
+        // `${import.meta.env.VITE_API_URL}/notes/${editingNote._id}`
+        , {
         text: editText,
         updatedDate: new Date().toISOString(),
       });

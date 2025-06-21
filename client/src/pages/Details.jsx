@@ -15,7 +15,10 @@ const Details = () => {
 
   const fetchNotes = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/notes", {
+      const res = await axios.get(
+        "https://eatsafe-server.vercel.app/notes"
+        // `${import.meta.env.VITE_API_URL}/notes`
+        , {
         params: { foodId: singleFood._id },
       });
       setNotes(res.data);

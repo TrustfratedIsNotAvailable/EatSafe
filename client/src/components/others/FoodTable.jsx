@@ -9,7 +9,6 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import axios from "axios";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
-import UpdateItem from "../../pages/UpdateItem";
 import { Link } from "react-router";
 
 const FoodTable = ({ myItems, setMyItems }) => {
@@ -32,7 +31,10 @@ const FoodTable = ({ myItems, setMyItems }) => {
 
     if (result.isConfirmed) {
       try {
-        const res = await axios.delete(`http://localhost:3000/food/${id}`);
+        const res = await axios.delete(
+          `https://eatsafe-server.vercel.app/food/${id}`
+          // `${import.meta.env.VITE_API_URL}/food/${id}`
+        );
 
         if (res.data.success) {
           setMyItems(myItems.filter((item) => item._id !== id));

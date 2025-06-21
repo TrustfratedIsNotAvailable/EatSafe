@@ -69,7 +69,10 @@ const Register = () => {
           uid: updatedUser.uid,
         };
 
-        return axios.post("http://localhost:3000/users", savedUser);
+        return axios.post(
+          "https://eatsafe-server.vercel.app/users"
+          // `${import.meta.env.VITE_API_URL}/users`
+          , savedUser);
       })
       .then(() => {
         toast.success("Account created successfully!");

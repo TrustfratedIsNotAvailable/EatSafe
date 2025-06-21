@@ -32,7 +32,8 @@ const MyFoodSummary = () => {
     const fetchMyFoods = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/food?userEmail=${user.email}`
+          `https://eatsafe-server.vercel.app/?userEmail=${user.email}`
+          // `${import.meta.env.VITE_API_URL}/?userEmail=${user.email}`
         );
         const foodList = res.data;
 
