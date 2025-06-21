@@ -16,7 +16,7 @@ const Register = () => {
   const validateURL = (url) => /^(http|https):\/\/[^ "]+$/.test(url);
   const validatePassword = (password) =>
     /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/.test(password);
-  const validateName = (name) => name.length >= 5 && name.length <= 20;
+  const validateName = (name) => name.length >= 2 && name.length <= 20;
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -27,7 +27,7 @@ const Register = () => {
     );
 
     if (!validateName(name)) {
-      return setError("Name must be between 5 and 20 characters.");
+      return setError("Name must be between 2 and 20 characters.");
     }
     if (!validateEmail(email)) {
       return setError("Invalid email address.");
