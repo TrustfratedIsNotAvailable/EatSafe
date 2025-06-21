@@ -13,6 +13,7 @@ import MyItem from "../pages/MyItem";
 import Details from "../pages/Details";
 import UpdateItem from "../pages/UpdateItem";
 import Dashboard from "../pages/DashBoard";
+import FeedbackForm from "../pages/FeedbackForm";
 
 const router = createBrowserRouter([
   {
@@ -78,6 +79,14 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: foodLoader,
+      },
+      {
+        path: "feedback",
+        element: (
+          <PrivateRoute>
+            <FeedbackForm />
+          </PrivateRoute>
+        ),
       },
     ],
   },
