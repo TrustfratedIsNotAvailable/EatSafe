@@ -19,9 +19,9 @@ const NavLinks = ({ className = "" }) => {
       <Link to="/my-item" className="hover:text-[#1B5E20] transition-colors">
         My Inventory
       </Link>
-      <a href="#expiringSoon" className="hover:text-[#1B5E20] transition-colors">
+      {/* <a href="#expiringSoon" className="hover:text-[#1B5E20] transition-colors">
         Expiring Soon
-      </a>
+      </a> */}
     </div>
   );
 };

@@ -14,11 +14,13 @@ import Details from "../pages/Details";
 import UpdateItem from "../pages/UpdateItem";
 import Dashboard from "../pages/DashBoard";
 import FeedbackForm from "../pages/FeedbackForm";
+import ErrorPage from "../pages/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
@@ -93,10 +95,16 @@ const router = createBrowserRouter([
   {
     path: "login",
     element: <Login />,
+    errorElement: <ErrorPage />,
   },
   {
     path: "register",
     element: <Register />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "*",
+    element: <ErrorPage />,
   },
 ]);
 
