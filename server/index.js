@@ -5,6 +5,7 @@ const { MongoClient, ServerApiVersion } = require("mongodb");
 const foodRoutes = require("./routes/food");
 const notesRoutes = require("./routes/note");
 const usersRoutes = require("./routes/user");
+const reviewsRoutes = require("./routes/review");
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -26,6 +27,7 @@ async function run() {
     const foodCollection = client.db("EatSafeDB").collection("food");
     const notesCollection = client.db("EatSafeDB").collection("notes");
     const usersCollection = client.db("EatSafeDB").collection("users");
+    const reviewsCollection = client.db("EatSafeDB").collection("reviews");
 
     // Inject collection
     //food route
@@ -48,7 +50,7 @@ async function run() {
       notesRoutes
     );
 
-    //user route
+    //users route
     app.use(
       "/users",
       (req, res, next) => {
@@ -56,6 +58,16 @@ async function run() {
         next();
       },
       usersRoutes
+    );
+
+    //reviews route
+    app.use(
+      "/reviews",
+      (req, res, next) => {
+        req.reviewsCollection = reviewsCollection;
+        next();
+      },
+      reviewsRoutes
     );
 
     app.get("/", (req, res) => {
