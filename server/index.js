@@ -35,6 +35,7 @@ async function run() {
       "/food",
       (req, res, next) => {
         req.foodCollection = foodCollection;
+        req.notesCollection = notesCollection;
         next();
       },
       foodRoutes
@@ -73,6 +74,7 @@ async function run() {
     app.get("/", (req, res) => {
       res.send("EatSafe-food expired tracker server is working.");
     });
+
 
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"

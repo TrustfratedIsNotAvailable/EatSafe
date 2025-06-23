@@ -30,4 +30,34 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Update all reviews by user uid
+router.put("/update-by-uid", async (req, res) => {
+  const { uid, name, photoURL } = req.body;
+
+  if (!uid || !name || !photoURL) {
+    return res.status(400).send({ message: "Missing required fields" });
+  }
+
+  try {
+    const result = await req.reviewsCollection.updateMany(
+      { uid },
+      {
+        $set: {
+          name,
+          photoURL,
+        },
+      }
+    );
+
+    res.send({
+      message: "User reviews updated successfully",
+      modifiedCount: result.modifiedCount,
+    });
+  } catch (error) {
+    console.error("Error updating reviews:", error);
+    res.status(500).send({ message: "Failed to update reviews", error });
+  }
+});
+
+
 module.exports = router;
