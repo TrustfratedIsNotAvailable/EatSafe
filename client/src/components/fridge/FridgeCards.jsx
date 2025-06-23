@@ -1,7 +1,11 @@
 import React from "react";
 import { Link } from "react-router";
 import { BsInfoSquare } from "react-icons/bs";
-import { useTheme } from "../../hooks/ThemeContext"; 
+import { useTheme } from "../../hooks/ThemeContext";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
 
 const FridgeCards = ({ currentItems }) => {
   const { theme } = useTheme();
@@ -23,62 +27,91 @@ const FridgeCards = ({ currentItems }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {currentItems.map((item) => {
-        const bgClass = isDark ? "bg-gray-800" : "bg-white";
+        const bgClass = isDark ? "bg-gray-900" : "bg-white";
         const textClass = isDark ? "text-gray-300" : "text-gray-600";
         const hoverShadow = isDark
           ? "hover:shadow-green-700"
-          : "hover:shadow-lg";
+          : "hover:shadow-2xl";
 
         return (
-          <div key={item._id} className="relative">
+          <div
+            key={item._id}
+            className={`relative overflow-hidden border ${
+              isDark ? "border-gray-700" : "border-gray-200"
+            } transition duration-300 transform hover:-translate-y-1 ${hoverShadow}`}
+          >
+            {/* Status badge */}
             {item.status === "expired" && (
-              <div className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 shadow z-10">
+              <div className="absolute top-3 right-3 bg-red-600 text-white text-xs px-3 py-1 rounded-full shadow animate-pulse z-10">
                 Expired
               </div>
             )}
-
             {item.status === "nearly expired" && (
-              <div className="absolute top-2 right-2 bg-yellow-400 text-black text-xs px-2 py-1 shadow z-10">
+              <div className="absolute top-3 right-3 bg-yellow-300 text-black text-xs px-3 py-1 rounded-full shadow z-10">
                 Nearly Expired
               </div>
             )}
 
-            <div
-              className={`${bgClass} overflow-hidden shadow transition duration-300 ${hoverShadow}`}
-            >
+            {/* Image */}
+            <div className="relative h-40">
               <img
                 src={item.foodImage}
                 alt={item.title}
-                className="w-full h-40 object-cover"
+                className="w-full h-full object-cover"
               />
-              <div className={`p-4 space-y-2 pb-10`}>
-                <h2
-                  className={`text-xl font-semibold ${
-                    isDark ? "text-gray-100" : "text-gray-900"
-                  }`}
-                >
-                  {item.title}
-                </h2>
-                <p className={`text-sm ${textClass}`}>
+            </div>
+
+            {/* Content */}
+            <div className="p-4 pb-16 space-y-2">
+              <h2
+                className={`text-xl font-bold ${
+                  isDark ? "text-white" : "text-gray-900"
+                }`}
+              >
+                {item.title}
+              </h2>
+
+              <div className="flex justify-between text-sm">
+                <span className={`${textClass}`}>
                   Category: {item.category}
-                </p>
-                <p className={`text-sm ${textClass}`}>
-                  Quantity: {item.quantity}
-                </p>
+                </span>
+                <span className={`${textClass}`}>Qty: {item.quantity}</span>
               </div>
 
-              <Link
-                to={`/details/${item._id}`}
-                className={`absolute bottom-3 right-3 ${
-                  isDark
-                    ? "text-gray-400 hover:text-green-400"
-                    : "text-gray-600 hover:text-blue-800"
-                } text-xl`}
-                title="View Details"
-              >
-                <BsInfoSquare />
-              </Link>
+              {item.addedDate && (
+                <p className={`text-xs italic ${textClass}`}>
+                  Added {dayjs(item.addedDate).fromNow()}
+                </p>
+              )}
+
+              {/* User Info */}
+              {item.userInfo && (
+                <div className="flex items-center gap-3 pt-3 border-t mt-4">
+                  <img
+                    src={item.userInfo.photoURL}
+                    alt={item.userInfo.name}
+                    title={item.userInfo.name}
+                    className="w-8 h-8 rounded-full object-cover transform hover:scale-105 transition duration-200"
+                  />
+                  <p className={`text-sm ${textClass}`}>
+                    <span className="font-medium">{item.userInfo.name}</span>
+                  </p>
+                </div>
+              )}
             </div>
+
+            {/* Details icon */}
+            <Link
+              to={`/details/${item._id}`}
+              className={`absolute bottom-4 right-4 ${
+                isDark
+                  ? "text-gray-400 hover:text-green-400"
+                  : "text-gray-600 hover:text-blue-800"
+              } text-xl`}
+              title="View Details"
+            >
+              <BsInfoSquare />
+            </Link>
           </div>
         );
       })}
