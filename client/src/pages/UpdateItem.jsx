@@ -80,172 +80,179 @@ const UpdateItem = () => {
   ];
 
   return (
-    <div
-      className={`w-full px-4 md:px-8 max-w-3xl mx-auto my-10 p-6 rounded-xl shadow-md ${
-        isDark
-          ? "bg-gray-900 text-white shadow-gray-700"
-          : "bg-gray-100 text-gray-900"
-      }`}
-    >
-      <h2
-        className={`text-3xl font-bold text-center mb-4 ${
-          isDark ? "text-blue-400" : "text-blue-500"
+    <div className="pb-8">
+      <div
+        className={`w-full px-4 md:px-8 max-w-3xl mx-auto mt-10 p-6 rounded-xl shadow-md ${
+          isDark
+            ? "bg-gray-900 text-white shadow-gray-700"
+            : "bg-gray-100 text-gray-900"
         }`}
       >
-        Update Food Item
-      </h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label
-            className={`label font-medium ${isDark ? "text-gray-300" : ""}`}
-          >
-            Food Title
-          </label>
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            className={`input w-full rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              isDark
-                ? "bg-gray-800 border border-gray-600 text-white placeholder-gray-400"
-                : "border border-gray-300"
-            }`}
-          />
-          {errors.title && (
-            <p className="text-red-500 text-sm">{errors.title}</p>
-          )}
-        </div>
-
-        <div>
-          <label
-            className={`label font-medium ${isDark ? "text-gray-300" : ""}`}
-          >
-            Food Image URL
-          </label>
-          <input
-            type="url"
-            name="foodImage"
-            value={formData.foodImage}
-            onChange={handleChange}
-            className={`input w-full rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              isDark
-                ? "bg-gray-800 border border-gray-600 text-white placeholder-gray-400"
-                : "border border-gray-300"
-            }`}
-          />
-          {errors.foodImage && (
-            <p className="text-red-500 text-sm">{errors.foodImage}</p>
-          )}
-        </div>
-
-        <div>
-          <label
-            className={`label font-medium ${isDark ? "text-gray-300" : ""}`}
-          >
-            Category
-          </label>
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            className={`select w-full rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              isDark
-                ? "bg-gray-800 border border-gray-600 text-white"
-                : "border border-gray-300"
-            }`}
-          >
-            <option value="" className={isDark ? "bg-gray-800 text-white" : ""}>
-              Select Category
-            </option>
-            {categories.map((cat) => (
-              <option
-                key={cat}
-                value={cat}
-                className={isDark ? "bg-gray-800 text-white" : ""}
-              >
-                {cat}
-              </option>
-            ))}
-          </select>
-          {errors.category && (
-            <p className="text-red-500 text-sm">{errors.category}</p>
-          )}
-        </div>
-
-        <div>
-          <label
-            className={`label font-medium ${isDark ? "text-gray-300" : ""}`}
-          >
-            Quantity
-          </label>
-          <input
-            type="text"
-            name="quantity"
-            value={formData.quantity}
-            onChange={handleChange}
-            min="1"
-            className={`input w-full rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              isDark
-                ? "bg-gray-800 border border-gray-600 text-white placeholder-gray-400"
-                : "border border-gray-300"
-            }`}
-          />
-          {errors.quantity && (
-            <p className="text-red-500 text-sm">{errors.quantity}</p>
-          )}
-        </div>
-
-        <div>
-          <label
-            className={`label font-medium ${isDark ? "text-gray-300" : ""}`}
-          >
-            Expiry Date
-          </label>
-          <input
-            type="date"
-            name="expiryDate"
-            value={formData.expiryDate}
-            onChange={handleChange}
-            className={`input w-full rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              isDark
-                ? "bg-gray-800 border border-gray-600 text-white placeholder-gray-400"
-                : "border border-gray-300"
-            }`}
-          />
-          {errors.expiryDate && (
-            <p className="text-red-500 text-sm">{errors.expiryDate}</p>
-          )}
-        </div>
-
-        <div>
-          <label className={`label font-medium ${isDark ? "text-white" : ""}`}>
-            Description
-          </label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            rows="3"
-            className={`textarea w-full rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              isDark
-                ? "bg-gray-800 border border-gray-600 text-white placeholder-gray-400"
-                : "border border-gray-300"
-            }`}
-          />
-        </div>
-
-        <button
-          type="submit"
-          className={`w-full font-semibold py-2 rounded-lg transition-colors ${
-            isDark
-              ? "bg-blue-600 hover:bg-blue-700 text-white"
-              : "bg-blue-500 hover:bg-blue-600 text-white"
+        <h2
+          className={`text-3xl font-bold text-center mb-4 ${
+            isDark ? "text-blue-400" : "text-blue-500"
           }`}
         >
-          🔄 Update Item
-        </button>
-      </form>
+          Update Food Item
+        </h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label
+              className={`label font-medium ${isDark ? "text-gray-300" : ""}`}
+            >
+              Food Title
+            </label>
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              className={`input w-full rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                isDark
+                  ? "bg-gray-800 border border-gray-600 text-white placeholder-gray-400"
+                  : "border border-gray-300"
+              }`}
+            />
+            {errors.title && (
+              <p className="text-red-500 text-sm">{errors.title}</p>
+            )}
+          </div>
+
+          <div>
+            <label
+              className={`label font-medium ${isDark ? "text-gray-300" : ""}`}
+            >
+              Food Image URL
+            </label>
+            <input
+              type="url"
+              name="foodImage"
+              value={formData.foodImage}
+              onChange={handleChange}
+              className={`input w-full rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                isDark
+                  ? "bg-gray-800 border border-gray-600 text-white placeholder-gray-400"
+                  : "border border-gray-300"
+              }`}
+            />
+            {errors.foodImage && (
+              <p className="text-red-500 text-sm">{errors.foodImage}</p>
+            )}
+          </div>
+
+          <div>
+            <label
+              className={`label font-medium ${isDark ? "text-gray-300" : ""}`}
+            >
+              Category
+            </label>
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              className={`select w-full rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                isDark
+                  ? "bg-gray-800 border border-gray-600 text-white"
+                  : "border border-gray-300"
+              }`}
+            >
+              <option
+                value=""
+                className={isDark ? "bg-gray-800 text-white" : ""}
+              >
+                Select Category
+              </option>
+              {categories.map((cat) => (
+                <option
+                  key={cat}
+                  value={cat}
+                  className={isDark ? "bg-gray-800 text-white" : ""}
+                >
+                  {cat}
+                </option>
+              ))}
+            </select>
+            {errors.category && (
+              <p className="text-red-500 text-sm">{errors.category}</p>
+            )}
+          </div>
+
+          <div>
+            <label
+              className={`label font-medium ${isDark ? "text-gray-300" : ""}`}
+            >
+              Quantity
+            </label>
+            <input
+              type="text"
+              name="quantity"
+              value={formData.quantity}
+              onChange={handleChange}
+              min="1"
+              className={`input w-full rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                isDark
+                  ? "bg-gray-800 border border-gray-600 text-white placeholder-gray-400"
+                  : "border border-gray-300"
+              }`}
+            />
+            {errors.quantity && (
+              <p className="text-red-500 text-sm">{errors.quantity}</p>
+            )}
+          </div>
+
+          <div>
+            <label
+              className={`label font-medium ${isDark ? "text-gray-300" : ""}`}
+            >
+              Expiry Date
+            </label>
+            <input
+              type="date"
+              name="expiryDate"
+              value={formData.expiryDate}
+              onChange={handleChange}
+              className={`input w-full rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                isDark
+                  ? "bg-gray-800 border border-gray-600 text-white placeholder-gray-400"
+                  : "border border-gray-300"
+              }`}
+            />
+            {errors.expiryDate && (
+              <p className="text-red-500 text-sm">{errors.expiryDate}</p>
+            )}
+          </div>
+
+          <div>
+            <label
+              className={`label font-medium ${isDark ? "text-white" : ""}`}
+            >
+              Description
+            </label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              rows="3"
+              className={`textarea w-full rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                isDark
+                  ? "bg-gray-800 border border-gray-600 text-white placeholder-gray-400"
+                  : "border border-gray-300"
+              }`}
+            />
+          </div>
+
+          <button
+            type="submit"
+            className={`w-full font-semibold py-2 rounded-lg transition-colors ${
+              isDark
+                ? "bg-blue-600 hover:bg-blue-700 text-white"
+                : "bg-blue-500 hover:bg-blue-600 text-white"
+            }`}
+          >
+            🔄 Update Item
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

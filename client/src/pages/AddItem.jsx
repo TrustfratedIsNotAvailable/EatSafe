@@ -91,8 +91,8 @@ const AddItem = () => {
   const darkClass = theme === "dark";
 
   return (
-    <div
-      className={`w-full px-4 md:px-8 max-w-3xl mx-auto my-10 p-6 rounded-xl shadow-md transition 
+    <div className="pb-8"> <div
+      className={`w-full px-4 md:px-8 max-w-3xl mx-auto mt-10 p-6 rounded-xl shadow-md transition 
       ${darkClass ? "bg-gray-900 text-white" : "bg-gray-100 text-black"}`}
     >
       <h2 className="text-3xl font-bold text-green-600 text-center mb-4">
@@ -233,7 +233,8 @@ const AddItem = () => {
           ➕ Add Item
         </button>
       </form>
-    </div>
+    </div></div>
+   
   );
 };
 

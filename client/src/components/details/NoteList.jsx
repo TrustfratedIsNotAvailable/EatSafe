@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import NoteItem from "../notelist/NoteItem";
 import NoteEditorModal from "../notelist/NoteEditorModal";
 import { useTheme } from "../../hooks/ThemeContext";
+import { handleDeleteNote } from "../../utils/deleteNote";
 
 const NoteList = ({ foodId, isOwner, notes, onNoteDeleted, user }) => {
   const { theme } = useTheme();
@@ -44,37 +45,15 @@ const NoteList = ({ foodId, isOwner, notes, onNoteDeleted, user }) => {
     }
   };
 
-  const handleDeleteNote = async (id) => {
-    const confirm = await Swal.fire({
-      title: "Are you sure?",
-      text: "This will permanently delete the note.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-      background: isDark ? "#1a1a1a" : "#fff",
-      color: isDark ? "#f0f0f0" : "#000",
-      confirmButtonColor: "#388E3C",
-      cancelButtonColor: "#d33",
-    });
-
-    if (confirm.isConfirmed) {
-      try {
-        await axios.delete(`https://eatsafe-server.vercel.app/notes/${id}`);
-        toast.success("Note deleted.");
-        onNoteDeleted();
-      } catch (error) {
-        console.error("Delete error:", error);
-        toast.error("Failed to delete note.");
-      }
-    }
-  };
-
   const handleUpdateNote = async () => {
     try {
-      await axios.put(`https://eatsafe-server.vercel.app/notes/${editingNote._id}`, {
-        text: editText,
-        updatedDate: new Date().toISOString(),
-      });
+      await axios.put(
+        `https://eatsafe-server.vercel.app/notes/${editingNote._id}`,
+        {
+          text: editText,
+          updatedDate: new Date().toISOString(),
+        }
+      );
       toast.success("Note updated.");
       setEditingNote(null);
       setEditText("");
@@ -85,16 +64,15 @@ const NoteList = ({ foodId, isOwner, notes, onNoteDeleted, user }) => {
     }
   };
 
+  const onDeleteNote = async (id) => {
+    const deleted = await handleDeleteNote(id, isDark);
+    if (deleted) {
+      onNoteDeleted();
+    }
+  };
+
   return (
     <div>
-      <h3
-        className={`text-xl font-semibold mt-2 mb-3 ${
-          isDark ? "text-gray-300" : "text-gray-900"
-        }`}
-      >
-        Notes
-      </h3>
-
       {notes.length === 0 ? (
         <p className={isDark ? "text-gray-400" : "text-gray-500"}>
           No notes yet.
@@ -112,7 +90,7 @@ const NoteList = ({ foodId, isOwner, notes, onNoteDeleted, user }) => {
                 setEditingNote(n);
                 setEditText(n.text);
               }}
-              onDelete={handleDeleteNote}
+              onDelete={onDeleteNote}
               likedByUser={likes[note._id]?.includes(userEmail)}
               likeCount={likes[note._id]?.length || 0}
               theme={theme}

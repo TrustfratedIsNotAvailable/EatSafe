@@ -6,6 +6,7 @@ const foodRoutes = require("./routes/food");
 const notesRoutes = require("./routes/note");
 const usersRoutes = require("./routes/user");
 const reviewsRoutes = require("./routes/review");
+const recipesRoutes = require("./routes/recipe");
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -71,10 +72,12 @@ async function run() {
       reviewsRoutes
     );
 
+    //recipes route
+    app.use("/recipes", recipesRoutes);
+
     app.get("/", (req, res) => {
       res.send("EatSafe-food expired tracker server is working.");
     });
-
 
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"

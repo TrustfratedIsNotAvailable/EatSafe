@@ -1,8 +1,7 @@
-
 import React, { useState } from "react";
 import axios from "axios";
 import { CheckCircle, AlertTriangle } from "lucide-react";
-import { useTheme } from "../../hooks/ThemeContext"; 
+import { useTheme } from "../../hooks/ThemeContext";
 
 const NoteInput = ({ foodId, isOwner, user, onNoteAdded }) => {
   const { theme } = useTheme();

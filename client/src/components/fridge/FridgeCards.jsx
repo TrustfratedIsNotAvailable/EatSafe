@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router";
 import { BsInfoSquare } from "react-icons/bs";
 import { useTheme } from "../../hooks/ThemeContext";
+import { motion } from "framer-motion";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
@@ -26,19 +27,20 @@ const FridgeCards = ({ currentItems }) => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {currentItems.map((item) => {
+      {currentItems.map((item, index) => {
         const bgClass = isDark ? "bg-gray-900" : "bg-white";
         const textClass = isDark ? "text-gray-300" : "text-gray-600";
-        const hoverShadow = isDark
-          ? "hover:shadow-green-700"
-          : "hover:shadow-2xl";
 
         return (
-          <div
+          <motion.div
             key={item._id}
-            className={`relative overflow-hidden border ${
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.05, duration: 0.3 }}
+            whileHover={{ scale: 1.03 }}
+            className={`relative rounded-2xl overflow-hidden border transition duration-300 shadow-lg hover:shadow-green-500/30 ${
               isDark ? "border-gray-700" : "border-gray-200"
-            } transition duration-300 transform hover:-translate-y-1 ${hoverShadow}`}
+            }`}
           >
             {/* Status badge */}
             {item.status === "expired" && (
@@ -57,7 +59,7 @@ const FridgeCards = ({ currentItems }) => {
               <img
                 src={item.foodImage}
                 alt={item.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover rounded-t-2xl"
               />
             </div>
 
@@ -112,7 +114,7 @@ const FridgeCards = ({ currentItems }) => {
             >
               <BsInfoSquare />
             </Link>
-          </div>
+          </motion.div>
         );
       })}
     </div>

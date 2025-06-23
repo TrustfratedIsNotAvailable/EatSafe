@@ -10,6 +10,7 @@ import {
 import { useLoaderData } from "react-router";
 import { useTheme } from "../hooks/ThemeContext";
 
+
 const Dashboard = () => {
   const { theme } = useTheme();
   const foodData = useLoaderData();
@@ -40,14 +41,13 @@ const Dashboard = () => {
   ];
 
   const categories = [
-  "Fruits",
-  "Vegetables",
-  "Dairy",
-  "Grains",
-  "Meat",
-  "Other",
-];
-
+    "Fruits",
+    "Vegetables",
+    "Dairy",
+    "Grains",
+    "Meat",
+    "Other",
+  ];
 
   const categoryData = categories.map((category) => ({
     category,
@@ -151,6 +151,7 @@ const Dashboard = () => {
           ))}
         </ul>
       </div>
+
     </div>
   );
 };

@@ -37,7 +37,7 @@ const MyItem = () => {
   if (loading) return <Spinner />;
 
   return (
-    <div className={`max-w-4xl mx-auto mt-10 p-4`}>
+    <div className={`max-w-4xl mx-auto my-10 p-4`}>
       <h2 className="text-3xl font-bold mb-6 text-green-600 text-center">
         My Items
       </h2>
