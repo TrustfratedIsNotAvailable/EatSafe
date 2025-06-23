@@ -1,26 +1,23 @@
-const express = require("express");
-const router = express.Router();
 const { ObjectId } = require("mongodb");
 
-//get all
-router.get("/", async (req, res) => {
+// GET latest 3 reviews (reversed to oldest-first display)
+exports.getLatestReviews = async (req, res) => {
   try {
-    // last 3 reviews sorted by createdAt desc
     const reviews = await req.reviewsCollection
       .find()
-      .sort({ createdAt: -1 }) // latest first
+      .sort({ createdAt: -1 }) // newest first
       .limit(3)
       .toArray();
 
-    res.send(reviews.reverse());
+    res.send(reviews.reverse()); // send in oldest-first order
   } catch (error) {
     console.error("Error fetching reviews:", error);
     res.status(500).send({ error: "Failed to fetch reviews." });
   }
-});
+};
 
-//add
-router.post("/", async (req, res) => {
+// POST a new review
+exports.addReview = async (req, res) => {
   const newReview = req.body;
   try {
     const result = await req.reviewsCollection.insertOne(newReview);
@@ -28,10 +25,10 @@ router.post("/", async (req, res) => {
   } catch (err) {
     res.status(500).send({ message: "Failed to insert review", error: err });
   }
-});
+};
 
-// Update all reviews by user uid
-router.put("/update-by-uid", async (req, res) => {
+// PUT update reviews by UID
+exports.updateReviewsByUid = async (req, res) => {
   const { uid, name, photoURL } = req.body;
 
   if (!uid || !name || !photoURL) {
@@ -41,12 +38,7 @@ router.put("/update-by-uid", async (req, res) => {
   try {
     const result = await req.reviewsCollection.updateMany(
       { uid },
-      {
-        $set: {
-          name,
-          photoURL,
-        },
-      }
+      { $set: { name, photoURL } }
     );
 
     res.send({
@@ -57,7 +49,4 @@ router.put("/update-by-uid", async (req, res) => {
     console.error("Error updating reviews:", error);
     res.status(500).send({ message: "Failed to update reviews", error });
   }
-});
-
-
-module.exports = router;
+};

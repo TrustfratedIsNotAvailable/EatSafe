@@ -1,5 +1,3 @@
-const express = require("express");
-const router = express.Router();
 const axios = require("axios");
 
 // Helper to deduplicate recipes by id
@@ -12,8 +10,8 @@ const dedupeById = (arr) => {
   });
 };
 
-router.get("/suggestions", async (req, res) => {
-  const { ingredients } = req.query; // comma separated list
+exports.getSuggestions = async (req, res) => {
+  const { ingredients } = req.query;
 
   if (!ingredients) return res.json({ recipes: [] });
 
@@ -25,26 +23,22 @@ router.get("/suggestions", async (req, res) => {
 
     let allMeals = [];
 
-    // Query the API for each ingredient and accumulate results
     for (const ing of ingredientList) {
       const response = await axios.get(
-        `https://www.themealdb.com/api/json/v1/1/filter.php?i=${encodeURIComponent(
-          ing
-        )}`
+        `https://www.themealdb.com/api/json/v1/1/filter.php?i=${encodeURIComponent(ing)}`
       );
+
       const meals = response.data.meals || [];
       const mapped = meals.map((meal) => ({
         id: meal.idMeal,
         title: meal.strMeal,
         thumbnail: meal.strMealThumb,
       }));
+
       allMeals = allMeals.concat(mapped);
     }
 
-    // Deduplicate combined results by id
     const uniqueMeals = dedupeById(allMeals);
-
-    // Limit to top 5
     const suggestions = uniqueMeals.slice(0, 5);
 
     res.json({ recipes: suggestions });
@@ -52,6 +46,4 @@ router.get("/suggestions", async (req, res) => {
     console.error("Error fetching recipes:", err.message);
     res.status(500).json({ error: "Failed to fetch recipes" });
   }
-});
-
-module.exports = router;
+};

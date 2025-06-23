@@ -1,19 +1,17 @@
-const express = require("express");
 const { ObjectId } = require("mongodb");
-const router = express.Router();
 
 // Get all users
-router.get("/", async (req, res) => {
+exports.getAllUsers = async (req, res) => {
   try {
     const result = await req.usersCollection.find().toArray();
     res.send(result);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch users", error });
   }
-});
+};
 
 // Add a new user
-router.post("/", async (req, res) => {
+exports.addUser = async (req, res) => {
   try {
     const user = req.body;
     const result = await req.usersCollection.insertOne(user);
@@ -21,10 +19,10 @@ router.post("/", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Failed to add user", error });
   }
-});
+};
 
-// PUT
-router.put("/:uid", async (req, res) => {
+// Upsert user by UID
+exports.upsertUser = async (req, res) => {
   const uid = req.params.uid;
   const user = req.body;
 
@@ -46,10 +44,10 @@ router.put("/:uid", async (req, res) => {
     console.error("Error updating user:", error);
     res.status(500).send({ message: "Failed to upsert user", error });
   }
-});
+};
 
 // Get a single user by UID
-router.get("/:uid", async (req, res) => {
+exports.getUserByUid = async (req, res) => {
   const uid = req.params.uid;
 
   try {
@@ -61,6 +59,4 @@ router.get("/:uid", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch user", error });
   }
-});
-
-module.exports = router;
+};

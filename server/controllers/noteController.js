@@ -1,12 +1,9 @@
-const express = require("express");
 const { ObjectId } = require("mongodb");
-const router = express.Router();
 
-
-router.get("/", async (req, res) => {
-  const { foodId, user } = req.query;
-
+exports.getNotes = async (req, res) => {
+  const { foodId } = req.query;
   const query = {};
+
   if (foodId) {
     query.foodId = foodId;
   }
@@ -18,21 +15,20 @@ router.get("/", async (req, res) => {
     console.error("Error fetching notes:", error);
     res.status(500).send({ error: "Failed to fetch notes." });
   }
-});
+};
 
-//add
-router.post("/", async (req, res) => {
+exports.addNote = async (req, res) => {
   const newNote = req.body;
+
   try {
     const result = await req.notesCollection.insertOne(newNote);
     res.send({ insertedId: result.insertedId });
   } catch (err) {
     res.status(500).send({ message: "Failed to insert note", error: err });
   }
-});
+};
 
-// Update
-router.put("/:id", async (req, res) => {
+exports.updateNote = async (req, res) => {
   const { id } = req.params;
   const updatedNote = req.body;
 
@@ -50,30 +46,25 @@ router.put("/:id", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Failed to update note", error });
   }
-});
+};
 
-
-// Delete
-router.delete("/:id", async (req, res) => {
+exports.deleteNote = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const result = await req.notesCollection.deleteOne({
-      _id: new ObjectId(id),
-    });
+    const result = await req.notesCollection.deleteOne({ _id: new ObjectId(id) });
 
     if (result.deletedCount > 0) {
-      res.send({ success: true, message: "notes deleted successfully" });
+      res.send({ success: true, message: "Note deleted successfully" });
     } else {
       res.status(404).json({ message: "Note not found" });
     }
   } catch (error) {
     res.status(500).json({ message: "Failed to delete note", error });
   }
-});
+};
 
-// Like/unlike toggle
-router.put("/like/:id", async (req, res) => {
+exports.toggleLike = async (req, res) => {
   const { id } = req.params;
   const { userEmail } = req.body;
 
@@ -82,7 +73,6 @@ router.put("/like/:id", async (req, res) => {
 
     if (!note) return res.status(404).send({ message: "Note not found" });
 
-    // Initialize likes if not present
     if (!note.likes) {
       note.likes = [];
       await req.notesCollection.updateOne(
@@ -92,23 +82,15 @@ router.put("/like/:id", async (req, res) => {
     }
 
     const alreadyLiked = note.likes.includes(userEmail);
-
     const update = alreadyLiked
       ? { $pull: { likes: userEmail } }
       : { $addToSet: { likes: userEmail } };
 
-    await req.notesCollection.updateOne(
-      { _id: new ObjectId(id) },
-      update
-    );
+    await req.notesCollection.updateOne({ _id: new ObjectId(id) }, update);
 
     res.send({ success: true, liked: !alreadyLiked });
   } catch (err) {
     console.error("Error toggling like:", err);
     res.status(500).send({ message: "Failed to toggle like", error: err });
   }
-});
-
-
-
-module.exports = router;
+};
