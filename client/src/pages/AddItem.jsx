@@ -82,14 +82,10 @@ const AddItem = () => {
   const categories = [
     "Fruits",
     "Vegetables",
-    "Grains & Cereals",
-    "Dairy Products",
-    "Meat & Poultry",
-    "Seafood",
-    "Snacks",
-    "Beverages",
-    "Baked Goods",
-    "other",
+    "Dairy",
+    "Grains",
+    "Meat",
+    "Other",
   ];
 
   const darkClass = theme === "dark";
@@ -173,17 +169,17 @@ const AddItem = () => {
         <div>
           <label className="label font-medium">Quantity</label>
           <input
-            type="number"
+            type="text"
             name="quantity"
             value={formData.quantity}
             onChange={handleChange}
-            className={`select w-full border rounded px-4 py-2 mt-1 focus:outline-none focus:ring-2 ${
+            className={`w-full border rounded px-4 py-2 mt-1 focus:outline-none focus:ring-2 ${
               darkClass
                 ? "bg-gray-800 text-white border-gray-700 focus:ring-green-500"
                 : "bg-white border-gray-300 focus:ring-[#1B5E20]"
             }`}
             min="1"
-            placeholder="e.g. 3"
+            placeholder=""
             required
           />
           {errors.quantity && (

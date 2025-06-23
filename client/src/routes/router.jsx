@@ -28,7 +28,11 @@ const router = createBrowserRouter([
       },
       {
         path: "fridge",
-        element: <Fridge />,
+        element: (
+          <PrivateRoute>
+            <Fridge />
+          </PrivateRoute>
+        ),
         loader: foodLoader,
       },
       {

@@ -15,7 +15,7 @@ const Testimonials = () => {
       try {
         const res = await axios.get(
           "https://eatsafe-server.vercel.app/reviews?limit=3&sort=desc"
-          // `${import.meta.env.VITE_API_URL}/reviews?limit=3&sort=desc`
+
         );
         setReviews(res.data.slice(-3)); // Take last 3 reviews
       } catch (error) {
@@ -57,7 +57,10 @@ const Testimonials = () => {
   const { name, review: text, rating, photoURL: image } = reviews[index];
 
   return (
-    <div className={`py-12 px-4 md:px-8 max-w-3xl mx-auto text-center`}>
+    <div
+      id="testimonials"
+      className={`py-12 px-4 md:px-8 max-w-3xl mx-auto text-center`}
+    >
       <h2
         className={`text-3xl font-bold mb-8 ${
           isDark ? "text-green-400" : "text-[#1B5E20]"

@@ -35,17 +35,29 @@ const MyProfile = () => {
 
     setLoading(true);
     try {
+      // Update user profile in Firebase
       await updateUserProfile({ displayName, photoURL });
       toast.success("Firebase profile updated");
 
       setUser({ ...user, displayName, photoURL });
 
+      // Update user document in DB
       const response = await axios.put(
         `https://eatsafe-server.vercel.app/users/${user.uid}`,
         {
           uid: user.uid,
           name: displayName,
           email: user.email,
+          photoURL,
+        }
+      );
+
+      // Update all user's reviews in DB
+      await axios.put(
+        `https://eatsafe-server.vercel.app/reviews/update-by-uid`,
+        {
+          uid: user.uid,
+          name: displayName,
           photoURL,
         }
       );

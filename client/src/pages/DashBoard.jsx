@@ -36,21 +36,18 @@ const Dashboard = () => {
     { label: "Total Items", value: totalItems },
     { label: "Expiring Soon", value: expiringSoonCount },
     { label: "Expired", value: expiredCount },
-    { label: "Total Category", value: 10 },
+    { label: "Total Category", value: 6 },
   ];
 
   const categories = [
-    "Fruits",
-    "Vegetables",
-    "Grains & Cereals",
-    "Dairy Products",
-    "Meat & Poultry",
-    "Seafood",
-    "Snacks",
-    "Beverages",
-    "Baked Goods",
-    "other",
-  ];
+  "Fruits",
+  "Vegetables",
+  "Dairy",
+  "Grains",
+  "Meat",
+  "Other",
+];
+
 
   const categoryData = categories.map((category) => ({
     category,

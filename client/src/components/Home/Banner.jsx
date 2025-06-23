@@ -7,7 +7,7 @@ import TrueFocus from "../animation/TrueFocus";
 const Banner = () => {
   return (
     <div
-      className="relative w-full min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center px-4"
+      className="relative w-full md:min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center p-4"
       style={{
         backgroundImage: `url(${bgImage})`,
       }}
@@ -52,14 +52,14 @@ const Banner = () => {
           transition={{ delay: 0.8, duration: 0.6 }}
         >
           <Link
-            to="/dashboard"
-            className="bg-[#43AF50] text-white px-6 py-3 rounded-md hover:bg-[#369443] transition font-medium"
+            to="/fridge"
+            className="bg-[#43AF50] text-white px-2 md:px-6 py-1 md:py-3 rounded-md hover:bg-[#369443] transition font-medium"
           >
             🥬 Explore Fridge
           </Link>
           <Link
             to="/add-item"
-            className="border-2 border-[#43AF50] text-blue-700 px-6 py-3 rounded-md bg-[#E8F5E980] hover:bg-[#E8F5E9] transition font-medium"
+            className="border-2 border-[#43AF50] text-blue-700 px-2 md:px-6 py-1 md:py-3 rounded-md bg-[#E8F5E980] hover:bg-[#E8F5E9] transition font-medium"
           >
             ➕ Add Food Item
           </Link>

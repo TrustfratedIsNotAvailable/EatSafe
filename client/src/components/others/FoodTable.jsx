@@ -5,7 +5,13 @@ import {
   flexRender,
   createColumnHelper,
 } from "@tanstack/react-table";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import {
+  FaEdit,
+  FaSort,
+  FaSortAmountDown,
+  FaSortAmountUp,
+  FaTrash,
+} from "react-icons/fa";
 import axios from "axios";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
@@ -19,6 +25,29 @@ const FoodTable = ({ myItems, setMyItems }) => {
   const columnHelper = createColumnHelper();
   const [pageIndex, setPageIndex] = useState(0);
   const pageSize = 6;
+
+  // New: sorting state: "asc", "desc", or "none"
+  const [sortOrder, setSortOrder] = useState("none");
+
+  // Sorted & paginated items
+  const sortedItems = useMemo(() => {
+    if (sortOrder === "none") return myItems;
+
+    // Sort by expiryDate
+    return [...myItems].sort((a, b) => {
+      const dateA = new Date(a.expiryDate);
+      const dateB = new Date(b.expiryDate);
+
+      if (sortOrder === "asc") return dateA - dateB;
+      else if (sortOrder === "desc") return dateB - dateA;
+      return 0;
+    });
+  }, [myItems, sortOrder]);
+
+  const paginatedItems = useMemo(() => {
+    const start = pageIndex * pageSize;
+    return sortedItems.slice(start, start + pageSize);
+  }, [sortedItems, pageIndex]);
 
   const handleDelete = async (id) => {
     const result = await Swal.fire({
@@ -62,21 +91,77 @@ const FoodTable = ({ myItems, setMyItems }) => {
         header: "Title",
         cell: (info) => <span>{info.getValue()}</span>,
       }),
+
       columnHelper.accessor("category", {
         header: "Category",
-        cell: (info) => <span>{info.getValue()}</span>,
+        cell: (info) => {
+          const category = info.getValue();
+          let baseClasses =
+            "text-xs px-2 py-1 rounded-full font-medium inline-block text-center";
+
+          const categoryStyles = {
+            Vegetables: "bg-green-100 text-green-800",
+            Fruits: "bg-orange-100 text-orange-800",
+            Dairy: "bg-blue-100 text-blue-800",
+            Grains: "bg-yellow-100 text-yellow-800",
+            Meat: "bg-red-100 text-red-800",
+            Other: "bg-gray-200 text-gray-800",
+          };
+
+          const style = categoryStyles[category] || "bg-gray-100 text-gray-800";
+
+          return <span className={`${baseClasses} ${style}`}>{category}</span>;
+        },
       }),
+
       columnHelper.accessor("quantity", {
         header: "Quantity",
         cell: (info) => <span>{info.getValue()}</span>,
       }),
+
       columnHelper.accessor("expiryDate", {
-        header: "Expiry Date",
+        header: () => (
+          <div
+            className="flex items-center gap-2 cursor-pointer select-none"
+            onClick={() => {
+              setSortOrder((prev) =>
+                prev === "none" ? "asc" : prev === "asc" ? "desc" : "none"
+              );
+              setPageIndex(0); // Reset to first page on sort change
+            }}
+          >
+            <span>Expiry Date</span>
+
+            {sortOrder === "asc" ? (
+              <FaSortAmountUp className="text-red-600" />
+            ) : sortOrder === "desc" ? (
+              <FaSortAmountDown className="text-green-600" />
+            ) : (
+              <FaSort className="text-gray-400 opacity-70" />
+            )}
+          </div>
+        ),
         cell: (info) => <span>{info.getValue()}</span>,
       }),
+
       columnHelper.accessor("status", {
         header: "Status",
-        cell: (info) => <span>{info.getValue()}</span>,
+        // cell: (info) => <span>{info.getValue()}</span>,
+        cell: (info) => {
+          const value = info.getValue();
+          let className =
+            "text-xs px-2 py-1 rounded font-medium inline-block text-center";
+
+          if (value === "expired") {
+            className += " bg-red-600 text-white";
+          } else if (value === "nearly expired") {
+            className += " bg-yellow-500 text-white";
+          } else {
+            className += " bg-green-500 text-white";
+          }
+
+          return <span className={className}>{value}</span>;
+        },
       }),
       columnHelper.display({
         id: "actions",
@@ -99,14 +184,10 @@ const FoodTable = ({ myItems, setMyItems }) => {
         ),
       }),
     ],
-    [setMyItems]
+    [setMyItems, sortOrder]
   );
 
-  const paginatedItems = useMemo(() => {
-    const start = pageIndex * pageSize;
-    return myItems.slice(start, start + pageSize);
-  }, [myItems, pageIndex]);
-
+  // Dynamic class mappings based on theme
   const table = useReactTable({
     data: paginatedItems,
     columns,
@@ -117,11 +198,10 @@ const FoodTable = ({ myItems, setMyItems }) => {
         pageSize,
       },
     },
-    pageCount: Math.ceil(myItems.length / pageSize),
+    pageCount: Math.ceil(sortedItems.length / pageSize),
     manualPagination: false,
   });
 
-  // Dynamic class mappings based on theme
   const headerBg = isDark
     ? "bg-gray-800 text-white"
     : "bg-white text-[#1B5E20]";
@@ -130,75 +210,79 @@ const FoodTable = ({ myItems, setMyItems }) => {
   const btnBg = isDark ? "bg-gray-700 text-white" : "bg-gray-200 text-black";
 
   return (
-    <div
-      className={`overflow-x-auto rounded-lg border ${
-        isDark ? "border-gray-700" : "border-gray-300"
-      }`}
-    >
-      <table className="min-w-full table-auto">
-        <thead className={`${headerBg}`}>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  className={`py-5 px-4 text-left border-b ${rowBorder}`}
-                >
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr
-              key={row.id}
-              className={`border-l-4 ${
-                row.original.status === "expired"
-                  ? "border-red-500 bg-red-100 hover:bg-red-200"
-                  : row.original.status === "nearly expired"
-                  ? "border-yellow-500 bg-yellow-100 hover:bg-yellow-200"
-                  : "border-green-500 hover:bg-green-200"
-              } hover:bg-opacity-90 ${rowBorder}`}
-            >
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="py-2 px-4">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <>
+      <div
+        className={`overflow-x-auto rounded-lg border ${
+          isDark ? "border-gray-700" : "border-gray-300"
+        }`}
+      >
+        <table className="min-w-full table-auto">
+          <thead className={`${headerBg}`}>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th
+                    key={header.id}
+                    className={`py-5 px-4 text-left border-b ${rowBorder}`}
+                  >
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <tr
+                key={row.id}
+                className={`border-l-4 ${
+                  row.original.status === "expired"
+                    ? "border-red-500"
+                    : row.original.status === "nearly expired"
+                    ? "border-yellow-500"
+                    : "border-green-500"
+                } hover:bg-opacity-90 ${rowBorder}`}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id} className="py-2 px-4">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-      <div className="flex justify-end gap-4 p-4">
-        <button
-          onClick={() => setPageIndex((old) => Math.max(old - 1, 0))}
-          disabled={pageIndex === 0}
-          className={`px-3 py-1 rounded disabled:opacity-50 ${btnBg}`}
-        >
-          Previous
-        </button>
-        <span className={`text-sm ${paginationText}`}>
-          Page {pageIndex + 1} of {Math.ceil(myItems.length / pageSize)}
-        </span>
-        <button
-          onClick={() =>
-            setPageIndex((old) =>
-              old + 1 < Math.ceil(myItems.length / pageSize) ? old + 1 : old
-            )
-          }
-          disabled={pageIndex + 1 >= Math.ceil(myItems.length / pageSize)}
-          className={`px-3 py-1 rounded disabled:opacity-50 ${btnBg}`}
-        >
-          Next
-        </button>
+        <div className="flex justify-end gap-4 p-4">
+          <button
+            onClick={() => setPageIndex((old) => Math.max(old - 1, 0))}
+            disabled={pageIndex === 0}
+            className={`px-3 py-1 rounded disabled:opacity-50 ${btnBg}`}
+          >
+            Previous
+          </button>
+          <span className={`text-sm ${paginationText}`}>
+            Page {pageIndex + 1} of {Math.ceil(sortedItems.length / pageSize)}
+          </span>
+          <button
+            onClick={() =>
+              setPageIndex((old) =>
+                old + 1 < Math.ceil(sortedItems.length / pageSize)
+                  ? old + 1
+                  : old
+              )
+            }
+            disabled={pageIndex + 1 >= Math.ceil(sortedItems.length / pageSize)}
+            className={`px-3 py-1 rounded disabled:opacity-50 ${btnBg}`}
+          >
+            Next
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

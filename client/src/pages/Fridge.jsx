@@ -15,19 +15,16 @@ const Fridge = () => {
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const categories = [
-    "All Categories",
-    "Fruits",
-    "Vegetables",
-    "Grains & Cereals",
-    "Dairy Products",
-    "Meat & Poultry",
-    "Seafood",
-    "Snacks",
-    "Beverages",
-    "Baked Goods",
-    "other",
-  ];
+ const categories = [
+  "All Categories",
+  "Fruits",
+  "Vegetables",
+  "Dairy",
+  "Grains",
+  "Meat",
+  "Other",
+];
+
 
   const filteredAndSortedFood = useMemo(() => {
     let filtered =

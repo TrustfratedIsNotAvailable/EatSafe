@@ -36,7 +36,7 @@ const MyFoodSummary = () => {
     const fetchMyFoods = async () => {
       try {
         const res = await axios.get(
-          `https://eatsafe-server.vercel.app/?userEmail=${user.email}`
+          `https://eatsafe-server.vercel.app/food?userEmail=${user.email}`
         );
         const foodList = res.data;
 

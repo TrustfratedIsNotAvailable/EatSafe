@@ -73,14 +73,10 @@ const UpdateItem = () => {
   const categories = [
     "Fruits",
     "Vegetables",
-    "Grains & Cereals",
-    "Dairy Products",
-    "Meat & Poultry",
-    "Seafood",
-    "Snacks",
-    "Beverages",
-    "Baked Goods",
-    "other",
+    "Dairy",
+    "Grains",
+    "Meat",
+    "Other",
   ];
 
   return (
@@ -184,7 +180,7 @@ const UpdateItem = () => {
             Quantity
           </label>
           <input
-            type="number"
+            type="text"
             name="quantity"
             value={formData.quantity}
             onChange={handleChange}
@@ -223,9 +219,7 @@ const UpdateItem = () => {
         </div>
 
         <div>
-          <label
-            className={`label font-medium ${isDark ? "text-gray-300" : ""}`}
-          >
+          <label className={`label font-medium ${isDark ? "text-white" : ""}`}>
             Description
           </label>
           <textarea
