@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { CheckCircle, AlertTriangle } from "lucide-react";
 import { useTheme } from "../../hooks/ThemeContext";
+import api from "../../api/api";
 
 const NoteInput = ({ foodId, isOwner, user, onNoteAdded }) => {
   const { theme } = useTheme();
@@ -21,7 +22,7 @@ const NoteInput = ({ foodId, isOwner, user, onNoteAdded }) => {
     };
 
     try {
-      await axios.post("https://eatsafe-server.vercel.app/notes", newNote);
+      await api.post("/notes", newNote);
       setNoteText("");
       setSuccess(true);
       setTimeout(() => setSuccess(false), 2000);

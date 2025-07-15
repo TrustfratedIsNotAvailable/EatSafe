@@ -8,6 +8,7 @@ import { useTheme } from "../hooks/ThemeContext";
 import { auth } from "../firebase.config";
 import toast from "react-hot-toast";
 import axios from "axios";
+import api from "../api/api";
 
 const Register = () => {
   const { setUser, updateUserProfile, register } = useAuth();
@@ -65,7 +66,7 @@ const Register = () => {
           uid: updatedUser.uid,
         };
 
-        return axios.post("https://eatsafe-server.vercel.app/users", savedUser);
+        return api.post("/users", savedUser);
       })
       .then(() => {
         toast.success("Account created successfully!");

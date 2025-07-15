@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import {
   PieChart,
   Pie,
@@ -10,6 +9,7 @@ import {
 } from "recharts";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../hooks/ThemeContext";
+import api from "../../api/api";
 
 const COLORS = [
   "#0088FE",
@@ -35,8 +35,8 @@ const MyFoodSummary = () => {
   useEffect(() => {
     const fetchMyFoods = async () => {
       try {
-        const res = await axios.get(
-          `https://eatsafe-server.vercel.app/food?userEmail=${user.email}`
+        const res = await api.get(
+          `/food?userEmail=${user.email}`
         );
         const foodList = res.data;
 

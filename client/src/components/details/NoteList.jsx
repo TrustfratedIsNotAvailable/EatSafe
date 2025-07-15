@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import NoteItem from "../notelist/NoteItem";
 import NoteEditorModal from "../notelist/NoteEditorModal";
 import { useTheme } from "../../hooks/ThemeContext";
 import { handleDeleteNote } from "../../utils/deleteNote";
+import api from "../../api/api";
 
 const NoteList = ({ foodId, isOwner, notes, onNoteDeleted, user }) => {
   const { theme } = useTheme();
@@ -26,8 +26,8 @@ const NoteList = ({ foodId, isOwner, notes, onNoteDeleted, user }) => {
 
   const handleLikeToggle = async (noteId) => {
     try {
-      await axios.put(
-        `https://eatsafe-server.vercel.app/notes/like/${noteId}`,
+      await api.put(
+        `/notes/like/${noteId}`,
         { userEmail }
       );
 
@@ -47,8 +47,8 @@ const NoteList = ({ foodId, isOwner, notes, onNoteDeleted, user }) => {
 
   const handleUpdateNote = async () => {
     try {
-      await axios.put(
-        `https://eatsafe-server.vercel.app/notes/${editingNote._id}`,
+      await api.put(
+        `/notes/${editingNote._id}`,
         {
           text: editText,
           updatedDate: new Date().toISOString(),

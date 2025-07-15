@@ -1,14 +1,19 @@
 const { ObjectId } = require("mongodb");
 const calculateStatus = require("../utils/calculateStatus");
+const {
+  foodCollection,
+  notesCollection,
+} = require("../models");
 
-exports.getAllFoods = async (req, res) => {
+// GET all foods
+const getAllFoods = async (req, res) => {
   try {
     const matchStage = {};
     if (req.query.userEmail) {
       matchStage.userEmail = req.query.userEmail;
     }
 
-    const foods = await req.foodCollection.aggregate([
+    const foods = await foodCollection.aggregate([
       { $match: matchStage },
       {
         $lookup: {
@@ -18,12 +23,7 @@ exports.getAllFoods = async (req, res) => {
           as: "userInfo",
         },
       },
-      {
-        $unwind: {
-          path: "$userInfo",
-          preserveNullAndEmptyArrays: true,
-        },
-      },
+      { $unwind: { path: "$userInfo", preserveNullAndEmptyArrays: true } },
       {
         $project: {
           title: 1,
@@ -54,10 +54,11 @@ exports.getAllFoods = async (req, res) => {
   }
 };
 
-exports.getSingleFood = async (req, res) => {
+// GET single food
+const getSingleFood = async (req, res) => {
   const id = req.params.id;
   try {
-    const foods = await req.foodCollection.aggregate([
+    const foods = await foodCollection.aggregate([
       { $match: { _id: new ObjectId(id) } },
       {
         $lookup: {
@@ -67,12 +68,7 @@ exports.getSingleFood = async (req, res) => {
           as: "userInfo",
         },
       },
-      {
-        $unwind: {
-          path: "$userInfo",
-          preserveNullAndEmptyArrays: true,
-        },
-      },
+      { $unwind: { path: "$userInfo", preserveNullAndEmptyArrays: true } },
       {
         $project: {
           title: 1,
@@ -104,15 +100,17 @@ exports.getSingleFood = async (req, res) => {
   }
 };
 
-exports.addFood = async (req, res) => {
+// ADD food
+const addFood = async (req, res) => {
   const newFood = req.body;
   newFood.status = calculateStatus(newFood.expiryDate);
 
-  const result = await req.foodCollection.insertOne(newFood);
+  const result = await foodCollection.insertOne(newFood);
   res.send(result);
 };
 
-exports.updateFood = async (req, res) => {
+// UPDATE food
+const updateFood = async (req, res) => {
   const { id } = req.params;
   const updatedData = req.body;
 
@@ -121,7 +119,7 @@ exports.updateFood = async (req, res) => {
   }
 
   try {
-    const result = await req.foodCollection.updateOne(
+    const result = await foodCollection.updateOne(
       { _id: new ObjectId(id) },
       { $set: updatedData }
     );
@@ -136,14 +134,15 @@ exports.updateFood = async (req, res) => {
   }
 };
 
-exports.deleteFood = async (req, res) => {
+// DELETE food and related notes
+const deleteFood = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const result = await req.foodCollection.deleteOne({ _id: new ObjectId(id) });
+    const result = await foodCollection.deleteOne({ _id: new ObjectId(id) });
 
     if (result.deletedCount > 0) {
-      const noteDeleteResult = await req.notesCollection.deleteMany({ foodId: id });
+      const noteDeleteResult = await notesCollection.deleteMany({ foodId: id });
 
       console.log(`Deleted food item ${id} and ${noteDeleteResult.deletedCount} related notes.`);
 
@@ -159,3 +158,11 @@ exports.deleteFood = async (req, res) => {
     res.status(500).json({ message: "Failed to delete food and notes", error });
   }
 };
+
+module.exports={
+  getAllFoods,
+  getSingleFood,
+  addFood,
+  updateFood ,
+deleteFood
+}

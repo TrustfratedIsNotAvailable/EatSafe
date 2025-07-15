@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
-import axios from "axios";
 import toast from "react-hot-toast";
+import api from "../api/api";
 
 export const handleDeleteNote = async (id, isDark = false) => {
   const confirm = await Swal.fire({
@@ -17,7 +17,7 @@ export const handleDeleteNote = async (id, isDark = false) => {
 
   if (confirm.isConfirmed) {
     try {
-      await axios.delete(`https://eatsafe-server.vercel.app/notes/${id}`);
+      await api.delete(`/notes/${id}`);
       toast.success("Note deleted.");
       return true;
     } catch (error) {

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
-import axios from "axios";
 import { FaUtensils } from "react-icons/fa";
 import { useTheme } from "../hooks/ThemeContext";
+import api from "../api/api";
 
 const RecipeSuggestions = ({ expiringFoods = [], mode = "nearlyExpired" }) => {
   const [recipes, setRecipes] = useState([]);
@@ -16,12 +16,17 @@ const RecipeSuggestions = ({ expiringFoods = [], mode = "nearlyExpired" }) => {
   useEffect(() => {
     if (!ingredientList) return;
 
-    axios
-      .get("https://eatsafe-server.vercel.app/recipes/suggestions", {
+    api
+      .get("/recipes/suggestions", {
         params: { ingredients: ingredientList },
       })
-      .then((res) => setRecipes(res.data.recipes))
-      .catch(console.error);
+      .then((res) => {
+        setRecipes(res.data.recipes || []);
+      })
+      .catch((err) => {
+        console.error(err);
+        setRecipes([]);
+      });
   }, [ingredientList]);
 
   if (recipes.length === 0) return null;

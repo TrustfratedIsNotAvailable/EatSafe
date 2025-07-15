@@ -1,5 +1,6 @@
 import axios from "axios";
 import Swal from "sweetalert2";
+import api from "../api/api";
 
 export const handleDeleteItem = async (id) => {
   const confirm = await Swal.fire({
@@ -12,8 +13,8 @@ export const handleDeleteItem = async (id) => {
 
   if (confirm.isConfirmed) {
     try {
-      const res = await axios.delete(
-        `https://eatsafe-server.vercel.app/food/${id}`
+      const res = await api.delete(
+        `/food/${id}`
       );
 
       console.log("Delete response:", res.status, res.data);

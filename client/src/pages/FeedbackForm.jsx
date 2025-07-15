@@ -4,6 +4,7 @@ import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { useTheme } from "../hooks/ThemeContext";
+import api from "../api/api";
 
 const FeedbackForm = () => {
   const { user } = useAuth();
@@ -34,8 +35,8 @@ const FeedbackForm = () => {
     };
 
     try {
-      const res = await axios.post(
-        "https://eatsafe-server.vercel.app/reviews",
+      const res = await api.post(
+        "/reviews",
         feedback
       );
       if (res.data.insertedId) {

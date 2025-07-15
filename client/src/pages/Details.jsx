@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useLoaderData, Link, useNavigate } from "react-router";
 import { FaTags, FaInfoCircle, FaBoxes, FaCalendarAlt } from "react-icons/fa";
+import { PhotoProvider, PhotoView } from "react-photo-view";
+import "react-photo-view/dist/react-photo-view.css";
+import dayjs from "dayjs";
+import { motion } from "framer-motion";
+import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import NoteList from "../components/details/NoteList";
 import CountdownTimer from "../components/details/CountdownTimer";
 import NoteInput from "../components/details/NoteInput";
 import { useTheme } from "../hooks/ThemeContext";
-import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { motion } from "framer-motion";
-import axios from "axios";
 import { handleDeleteItem } from "../utils/DeleteItem";
+import api from "../api/api";
 
 dayjs.extend(relativeTime);
 
@@ -29,7 +32,7 @@ const Details = () => {
 
   const fetchNotes = async () => {
     try {
-      const res = await axios.get("https://eatsafe-server.vercel.app/notes", {
+      const res = await api.get("/notes", {
         params: { foodId: singleFood._id },
       });
       setNotes(res.data);
@@ -98,19 +101,23 @@ const Details = () => {
                     {singleFood.userInfo.name}
                   </span>
                 </p>
-                <p className="text-xs text-gray-400">{singleFood.userEmail}</p>
+
               </div>
             </div>
           )}
 
           {/* Image */}
-          <motion.img
-            src={singleFood.foodImage}
-            alt={singleFood.title}
-            className="w-full h-[380px] object-cover rounded-md shadow mb-4"
-            whileHover={{ scale: 1.015 }}
-            transition={{ duration: 0.2 }}
-          />
+          <PhotoProvider>
+            <PhotoView src={singleFood.foodImage}>
+              <motion.img
+                src={singleFood.foodImage}
+                alt={singleFood.title}
+                className="w-full h-[380px] object-cover rounded-md shadow mb-4 cursor-zoom-in"
+                whileHover={{ scale: 1.015 }}
+                transition={{ duration: 0.2 }}
+              />
+            </PhotoView>
+          </PhotoProvider>
 
           {/* Info Section */}
           <div

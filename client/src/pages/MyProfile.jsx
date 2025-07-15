@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../hooks/ThemeContext";
 import axios from "axios";
 import MyFoodSummary from "../components/others/MyFoodSummary";
+import api from "../api/api";
 
 const MyProfile = () => {
   const { user, updateUserProfile, setUser } = useAuth();
@@ -42,8 +43,8 @@ const MyProfile = () => {
       setUser({ ...user, displayName, photoURL });
 
       // Update user document in DB
-      const response = await axios.put(
-        `https://eatsafe-server.vercel.app/users/${user.uid}`,
+      const response = await api.put(
+        `/users/${user.uid}`,
         {
           uid: user.uid,
           name: displayName,
@@ -53,8 +54,8 @@ const MyProfile = () => {
       );
 
       // Update all user's reviews in DB
-      await axios.put(
-        `https://eatsafe-server.vercel.app/reviews/update-by-uid`,
+      await api.put(
+        `/reviews/update-by-uid`,
         {
           uid: user.uid,
           name: displayName,

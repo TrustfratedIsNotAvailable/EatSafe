@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { useLoaderData, useNavigate } from "react-router";
 import axios from "axios";
 import { useTheme } from "../hooks/ThemeContext";
+import api from "../api/api";
 
 const UpdateItem = () => {
   const food = useLoaderData();
@@ -58,8 +59,8 @@ const UpdateItem = () => {
     }
 
     try {
-      await axios.put(
-        `https://eatsafe-server.vercel.app/food/${food._id}`,
+      await api.put(
+        `/food/${food._id}`,
         formData
       );
       toast.success("Item updated successfully!");

@@ -46,7 +46,7 @@ const Login = () => {
         };
 
         axios
-          .get(`https://eatsafe-server.vercel.app/users/${user.uid}`)
+          .get(`/users/${user.uid}`)
           .then(() => {
             toast.success("Logged in successfully!");
             navigate("/");
@@ -54,7 +54,7 @@ const Login = () => {
           .catch((err) => {
             if (err.response && err.response.status === 404) {
               axios
-                .post("https://eatsafe-server.vercel.app/users", savedUser)
+                .post("/users", savedUser)
                 .then(() => {
                   toast.success("User created & logged in!");
                   navigate("/");

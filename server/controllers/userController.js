@@ -1,9 +1,10 @@
 const { ObjectId } = require("mongodb");
+const { usersCollection } = require("../models");
 
 // Get all users
-exports.getAllUsers = async (req, res) => {
+const getAllUsers = async (req, res) => {
   try {
-    const result = await req.usersCollection.find().toArray();
+    const result = await usersCollection.find().toArray();
     res.send(result);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch users", error });
@@ -11,10 +12,10 @@ exports.getAllUsers = async (req, res) => {
 };
 
 // Add a new user
-exports.addUser = async (req, res) => {
+const addUser = async (req, res) => {
   try {
     const user = req.body;
-    const result = await req.usersCollection.insertOne(user);
+    const result = await usersCollection.insertOne(user);
     res.send(result);
   } catch (error) {
     res.status(500).json({ message: "Failed to add user", error });
@@ -22,7 +23,7 @@ exports.addUser = async (req, res) => {
 };
 
 // Upsert user by UID
-exports.upsertUser = async (req, res) => {
+const upsertUser = async (req, res) => {
   const uid = req.params.uid;
   const user = req.body;
 
@@ -38,7 +39,7 @@ exports.upsertUser = async (req, res) => {
       },
     };
 
-    const result = await req.usersCollection.updateOne(filter, updateDoc, options);
+    const result = await usersCollection.updateOne(filter, updateDoc, options);
     res.status(200).send(result);
   } catch (error) {
     console.error("Error updating user:", error);
@@ -47,11 +48,11 @@ exports.upsertUser = async (req, res) => {
 };
 
 // Get a single user by UID
-exports.getUserByUid = async (req, res) => {
+const getUserByUid = async (req, res) => {
   const uid = req.params.uid;
 
   try {
-    const user = await req.usersCollection.findOne({ uid });
+    const user = await usersCollection.findOne({ uid });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -59,4 +60,11 @@ exports.getUserByUid = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch user", error });
   }
+};
+
+module.exports = {
+  getAllUsers,
+  addUser,
+  upsertUser,
+  getUserByUid,
 };

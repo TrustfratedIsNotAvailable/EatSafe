@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../hooks/ThemeContext";
-import axios from "axios";
+import api from "../api/api";
 
 const AddItem = () => {
   const { user } = useAuth();
@@ -59,7 +59,7 @@ const AddItem = () => {
     };
 
     try {
-      await axios.post("https://eatsafe-server.vercel.app/food", payload);
+      await api.post("/food", payload);
       toast.success("Item added successfully!");
       setFormData({
         foodImage: "",

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
-import axios from "axios";
 import { useTheme } from "../../hooks/ThemeContext";
+import api from "../../api/api";
 
 const Testimonials = () => {
   const [reviews, setReviews] = useState([]);
@@ -13,8 +13,8 @@ const Testimonials = () => {
     // Fetch last 3 reviews
     const fetchReviews = async () => {
       try {
-        const res = await axios.get(
-          "https://eatsafe-server.vercel.app/reviews?limit=3&sort=desc"
+        const res = await api.get(
+          "/reviews?limit=3&sort=desc"
 
         );
         setReviews(res.data.slice(-3)); // Take last 3 reviews

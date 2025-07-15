@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../hooks/ThemeContext";
-import axios from "axios";
-import Spinner from "../components/shared/Spinner";
 import FoodTable from "../components/others/FoodTable";
 import { useNavigate } from "react-router";
+import api from "../api/api";
 
 const MyItem = () => {
   const navigate = useNavigate();
@@ -18,8 +20,8 @@ const MyItem = () => {
   useEffect(() => {
     const fetchMyItems = async () => {
       try {
-        const res = await axios.get(
-          `https://eatsafe-server.vercel.app/food?userEmail=${user.email}`
+        const res = await api.get(
+          `/food?userEmail=${user.email}`
         );
         setItems(res.data);
       } catch (error) {
@@ -34,7 +36,34 @@ const MyItem = () => {
     }
   }, [user]);
 
-  if (loading) return <Spinner />;
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto my-10 p-4">
+        <h2 className="text-3xl font-bold mb-6 text-green-600 text-center">
+          <Skeleton width={200} height={30} />
+        </h2>
+
+        {/* Skeleton rows simulating the table */}
+        <div className="space-y-4">
+          {[...Array(6)].map((_, idx) => (
+            <div
+              key={idx}
+              className={`grid grid-cols-6 gap-4 items-center p-4 rounded ${
+                isDark ? "bg-gray-800" : "bg-gray-100"
+              }`}
+            >
+              <Skeleton height={40} width={40} circle />
+              <Skeleton height={20} width={`100%`} />
+              <Skeleton height={20} width={`100%`} />
+              <Skeleton height={20} width={`80%`} />
+              <Skeleton height={20} width={`80%`} />
+              <Skeleton height={30} width={60} />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`max-w-4xl mx-auto my-10 p-4`}>

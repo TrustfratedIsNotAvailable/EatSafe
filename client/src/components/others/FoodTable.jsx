@@ -179,8 +179,8 @@ const FoodTable = ({ myItems, setMyItems }) => {
     ? "bg-gray-800 text-white"
     : "bg-white text-[#1B5E20]";
   const rowBorder = isDark ? "border-gray-700" : "border-b-gray-200";
-  const paginationText = isDark ? "text-gray-300" : "text-gray-600";
-  const btnBg = isDark ? "bg-gray-700 text-white" : "bg-gray-200 text-black";
+  // const paginationText = isDark ? "text-gray-300" : "text-gray-600";
+  // const btnBg = isDark ? "bg-gray-700 text-white" : "bg-gray-200 text-black";
 
   return (
     <>
@@ -235,31 +235,6 @@ const FoodTable = ({ myItems, setMyItems }) => {
           </tbody>
         </table>
 
-        {/* <div className="flex justify-end gap-4 p-4">
-          <button
-            onClick={() => setPageIndex((old) => Math.max(old - 1, 0))}
-            disabled={pageIndex === 0}
-            className={`px-3 py-1 rounded disabled:opacity-50 ${btnBg}`}
-          >
-            Previous
-          </button>
-          <span className={`text-sm ${paginationText}`}>
-            Page {pageIndex + 1} of {Math.ceil(sortedItems.length / pageSize)}
-          </span>
-          <button
-            onClick={() =>
-              setPageIndex((old) =>
-                old + 1 < Math.ceil(sortedItems.length / pageSize)
-                  ? old + 1
-                  : old
-              )
-            }
-            disabled={pageIndex + 1 >= Math.ceil(sortedItems.length / pageSize)}
-            className={`px-3 py-1 rounded disabled:opacity-50 ${btnBg}`}
-          >
-            Next
-          </button>
-        </div> */}
         <div
           className={`flex justify-end gap-4 p-4 rounded-md ${
             isDark
