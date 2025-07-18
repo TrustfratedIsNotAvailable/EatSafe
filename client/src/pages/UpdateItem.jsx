@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useLoaderData, useNavigate } from "react-router";
-import axios from "axios";
 import { useTheme } from "../hooks/ThemeContext";
 import api from "../api/api";
 

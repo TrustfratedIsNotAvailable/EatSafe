@@ -5,7 +5,6 @@ import { PhotoProvider, PhotoView } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
-import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import NoteList from "../components/details/NoteList";
 import CountdownTimer from "../components/details/CountdownTimer";
@@ -21,10 +20,9 @@ const Details = () => {
   const singleFood = useLoaderData();
   const navigate = useNavigate();
 
-  console.log(singleFood);
-
   const { user } = useAuth();
   const { theme } = useTheme();
+
   const isOwner = user?.email === singleFood.userEmail;
   const isDark = theme === "dark";
 

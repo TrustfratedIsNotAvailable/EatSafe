@@ -6,7 +6,8 @@ import loginAnimation from "../assets/login-animation.json";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../hooks/ThemeContext";
 import toast from "react-hot-toast";
-import axios from "axios";
+import api from "../api/api";
+
 
 const Login = () => {
   const { login, googleSignIn } = useAuth();
@@ -45,7 +46,7 @@ const Login = () => {
           uid: user.uid,
         };
 
-        axios
+        api
           .get(`/users/${user.uid}`)
           .then(() => {
             toast.success("Logged in successfully!");
@@ -53,7 +54,7 @@ const Login = () => {
           })
           .catch((err) => {
             if (err.response && err.response.status === 404) {
-              axios
+              api
                 .post("/users", savedUser)
                 .then(() => {
                   toast.success("User created & logged in!");

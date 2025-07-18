@@ -8,6 +8,7 @@ const AddItem = () => {
   const { user } = useAuth();
   const { theme } = useTheme();
 
+
   const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
     foodImage: "",

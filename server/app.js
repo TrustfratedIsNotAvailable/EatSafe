@@ -11,7 +11,13 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: ['http://localhost:5173','https://eatsafe-7744e.web.app'],
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use(express.json());
 
 // Use centralized routes
@@ -33,6 +39,5 @@ async function connectToMongo() {
   }
 }
 connectToMongo();
-
 
 module.exports = app;

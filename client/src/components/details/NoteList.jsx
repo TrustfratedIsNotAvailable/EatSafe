@@ -7,9 +7,11 @@ import { useTheme } from "../../hooks/ThemeContext";
 import { handleDeleteNote } from "../../utils/deleteNote";
 import api from "../../api/api";
 
+
 const NoteList = ({ foodId, isOwner, notes, onNoteDeleted, user }) => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
+
 
   const [editingNote, setEditingNote] = useState(null);
   const [editText, setEditText] = useState("");

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { useTheme } from "../hooks/ThemeContext";

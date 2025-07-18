@@ -3,7 +3,6 @@ import Swal from "sweetalert2";
 import { toast } from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../hooks/ThemeContext";
-import axios from "axios";
 import MyFoodSummary from "../components/others/MyFoodSummary";
 import api from "../api/api";
 

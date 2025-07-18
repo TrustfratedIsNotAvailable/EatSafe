@@ -7,7 +7,6 @@ import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../hooks/ThemeContext";
 import { auth } from "../firebase.config";
 import toast from "react-hot-toast";
-import axios from "axios";
 import api from "../api/api";
 
 const Register = () => {
@@ -87,12 +86,6 @@ const Register = () => {
           isDark ? "bg-gray-800 shadow-green-700" : "bg-white shadow-[#43AF50]"
         }`}
       >
-        {/* Left: Lottie Animation */}
-        {/* <div className="w-full md:w-1/2 flex items-center justify-center">
-          <div className="w-72 h-72 md:w-96 md:h-96">
-            <Lottie animationData={registerAnimation} loop={true} />
-          </div>
-        </div> */}
         <div className="hidden md:flex w-full md:w-1/2 items-center justify-center">
   <div className="w-72 h-72 md:w-96 md:h-96">
     <Lottie animationData={registerAnimation} loop={true} />
@@ -138,7 +131,7 @@ const Register = () => {
                   <input
                     key={field}
                     type={
-                      field.includes("password")
+                       field === "password" || field === "confirmPass"
                         ? "password"
                         : field === "photo"
                         ? "url"
